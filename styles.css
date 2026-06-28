@@ -1782,13 +1782,20 @@ h2 {
 .popup-directions-link {
   flex: 1 1 100%;
   min-height: 44px !important;
-  background: white !important;
-  color: var(--lapit-ink) !important;
-  border: 2px solid var(--lapit-ink) !important;
-  box-shadow: 3px 3px 0 var(--lapit-ink) !important;
+  background: var(--primary) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(70, 93, 222, 0.35) !important;
   border-radius: 12px !important;
-  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif !important;
-  font-size: 0.9rem !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.popup-directions-link:active {
+  transform: scale(0.97) !important;
+  opacity: 0.9 !important;
 }
 
 .spot-popup-actions button {
@@ -3483,11 +3490,14 @@ summary {
   box-shadow: none;
 }
 
-/* Apply the thick brand borders to the actual popup container */
+/* Apply a premium glassmorphism container */
 .maplibregl-popup-content {
-  border: 3px solid var(--lapit-ink) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
   border-radius: 20px !important;
-  box-shadow: 6px 6px 0 var(--lapit-ink), 0 24px 80px rgba(15, 23, 42, 0.28) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.08) !important;
   padding: 0 !important;
   overflow: hidden !important;
 }
@@ -3536,8 +3546,12 @@ summary {
 }
 
 .spot-popup-card h3 {
-  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
-  font-weight: 950;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: #0f172a;
+  margin-bottom: 8px;
 }
 
 .maplibregl-popup-content:has(.user-popup-card) {

@@ -721,13 +721,15 @@ function openSpotPopup(marker) {
 function getTransitPopupHtml(item, sourceText, directionsUrl) {
   const badgeType = getNearestBadgeType(item.type);
   const badgeClass = badgeType.toLowerCase().replaceAll(" ", "-");
+  const isOsm = sourceText.includes('OpenStreetMap');
+  const sourceLabel = isOsm ? '<span>OpenStreetMap</span>' : '';
 
   return `
     <article class="spot-popup-card">
       <h3>${escapeHtml(item.name)}</h3>
       <div class="spot-popup-meta">
         <span class="badge ${badgeClass}">${getNearestBadgeIcon(item.type)} ${escapeHtml(badgeType)}</span>
-        <span>${escapeHtml(sourceText)}</span>
+        ${sourceLabel}
       </div>
       <a class="directions-link popup-directions-link" href="${directionsUrl}" target="_blank" rel="noopener">Directions</a>
     </article>
