@@ -209,17 +209,17 @@ const sharedPinTypes = new Set([
   "Other"
 ]);
 const markerColors = {
-  bus: "#dc2626",
-  ferry: "#0284c7",
-  jeepney: "#16a34a",
-  other: "#475569",
-  pending: "#f59e0b",
-  terminal: "#475569",
-  train: "#2563eb",
-  transfer: "#f59e0b",
-  tricycle: "#7c3aed",
-  user: "#0ea5e9",
-  uvVan: "#0891b2"
+  bus: "#E11D48",       // Deep Rose
+  ferry: "#06B6D4",     // Bright Aqua/Cyan
+  jeepney: "#10B981",   // Emerald Green
+  other: "#64748B",     // Slate
+  pending: "#FBBF24",   // Golden Yellow
+  terminal: "#334155",  // Dark Slate
+  train: "#4F46E5",     // Indigo
+  transfer: "#8B5CF6",  // Violet
+  tricycle: "#D946EF",  // Fuchsia
+  user: "#2563EB",      // Standard Location Blue
+  uvVan: "#F97316"      // Vibrant Orange
 };
 
 const routeColors = {
