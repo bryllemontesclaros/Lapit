@@ -3084,7 +3084,7 @@ function showNearestStations(position) {
       radius: 11
     })
       .addTo(map)
-      .bindPopup("You are here");
+      .bindPopup("<div class='spot-popup-card user-popup-card'>You are here</div>");
   }
 
   if (Number.isFinite(accuracyMeters)) {

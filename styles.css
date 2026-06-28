@@ -3486,6 +3486,17 @@ summary {
   font-weight: 950;
 }
 
+.user-popup-card {
+  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding-right: 32px; /* Ensure space for the close button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
 .route-mode-banner {
   border: 3px solid var(--lapit-ink);
   border-radius: 18px;
