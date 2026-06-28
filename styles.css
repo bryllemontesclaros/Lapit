@@ -3418,13 +3418,6 @@ body {
     align-items: center;
   }
 
-  .map-actions {
-    /* Let the base glassmorphism style show — no lapit brand override needed here */
-  }
-
-  .map-action-button {
-    /* Retain borders on mobile */
-  }
 
   .panel {
     border-width: 3px 0 0;
