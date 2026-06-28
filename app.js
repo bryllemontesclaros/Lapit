@@ -173,6 +173,12 @@ const stations = [
   { name: "U.P. Town Center P2P Terminal", lat: 14.6508, lng: 121.0754, type: "Bus Terminal" },
   { name: "Quiapo Church Jeepney Terminal", lat: 14.5986, lng: 120.9839, type: "Jeepney Terminal" },
   { name: "Baclaran Jeepney Terminal", lat: 14.5332, lng: 120.9933, type: "Jeepney Terminal" },
+  { name: "SM North EDSA UV Express Terminal", lat: 14.6563, lng: 121.0290, type: "UV Express Terminal" },
+  { name: "Centris Station Transport Hub", lat: 14.6422, lng: 121.0402, type: "UV Express Terminal" },
+  { name: "Starmall EDSA-Shaw Transport Terminal", lat: 14.5815, lng: 121.0543, type: "UV Express Terminal" },
+  { name: "Festival Mall Alabang UV Express", lat: 14.4179, lng: 121.0422, type: "UV Express Terminal" },
+  { name: "SM Southmall Transport Terminal", lat: 14.4333, lng: 121.0127, type: "UV Express Terminal" },
+  { name: "Lawton Transport Hub", lat: 14.5930, lng: 120.9817, type: "Jeepney Terminal" },
 
   // PNR Stations
   { name: "PNR Tutuban Station", lat: 14.6120, lng: 120.9723, type: "Train Station" },
