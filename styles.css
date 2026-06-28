@@ -2943,11 +2943,6 @@ body {
 .onboarding-overlay {
   align-items: center;
   padding: max(76px, calc(env(safe-area-inset-top) + 68px)) clamp(18px, 4vw, 56px) clamp(24px, 5vw, 64px);
-  background:
-    radial-gradient(circle at 14% 22%, rgba(248, 213, 107, 0.46), transparent 25%),
-    radial-gradient(circle at 82% 18%, rgba(70, 93, 222, 0.18), transparent 24%),
-    linear-gradient(180deg, #fff8ec 0%, #fffdf8 58%, #f8d56b 58%, #f8d56b 100%);
-  backdrop-filter: none;
 }
 
 .landing-ticker {
@@ -3367,8 +3362,6 @@ body {
   .onboarding-overlay {
     align-items: flex-start;
     padding: max(72px, calc(env(safe-area-inset-top) + 66px)) 16px max(20px, env(safe-area-inset-bottom));
-    background:
-      linear-gradient(180deg, #fff8ec 0%, #fffdf8 68%, #f8d56b 68%, #f8d56b 100%);
   }
 
   .landing-shell {
@@ -3916,8 +3909,6 @@ summary {
     display: block;
     min-height: 100dvh;
     padding: max(48px, calc(env(safe-area-inset-top) + 42px)) 16px max(18px, env(safe-area-inset-bottom));
-    background:
-      linear-gradient(180deg, #fff8ec 0%, #fffdf8 54%, #f8d56b 54%, #f8d56b 100%);
   }
 
   .landing-ticker {
