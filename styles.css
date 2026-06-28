@@ -2996,11 +2996,17 @@ body {
   border-radius: 20px;
   background: rgba(255, 253, 248, 0.9);
   box-shadow: 6px 6px 0 var(--lapit-ink), var(--lapit-soft-shadow);
+  gap: 8px;
+  padding: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .map-action-button {
   min-height: 48px;
   box-shadow: 3px 3px 0 var(--lapit-ink);
+  border: 2px solid var(--lapit-ink);
+  border-radius: 12px;
 }
 
 .my-location-button {
@@ -3211,18 +3217,22 @@ summary {
   height: 36px;
 }
 
+/* Remove borders from the inner card so it doesn't double up with the popup container */
 .spot-popup-card,
 .pin-dialog,
 .legal-dialog {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Apply the thick brand borders to the actual popup container */
+.maplibregl-popup-content {
   border: 3px solid var(--lapit-ink);
   border-radius: 18px;
   box-shadow: 6px 6px 0 var(--lapit-ink), 0 24px 80px rgba(15, 23, 42, 0.28);
-}
-
-.maplibregl-popup-content {
-  border: 1.5px solid rgba(21, 21, 21, 0.12);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.18);
+  padding: 0;
+  overflow: hidden;
 }
 
 /* Leaflet popup — used for the user location "You are here" marker */
@@ -3237,11 +3247,11 @@ summary {
 
 .leaflet-popup-content {
   margin: 0 !important;
-  padding: 7px 14px !important;
+  padding: 10px 14px 10px 14px !important;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.78rem;
   font-weight: 600;
-  line-height: 1;
+  line-height: normal;
   white-space: nowrap;
 }
 
@@ -3256,6 +3266,11 @@ summary {
 
 .leaflet-popup-close-button {
   display: none !important;
+}
+
+/* Ensure inner card has padding since container padding is 0 */
+.spot-popup-card {
+  padding: 16px 18px 18px;
 }
 
 .spot-popup-card h3 {

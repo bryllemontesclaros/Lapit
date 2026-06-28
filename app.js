@@ -1133,7 +1133,7 @@ function resetRouteMode(message = "Community spots are visible to everyone.") {
   pendingRouteEndId = null;
   clearSelectedRouteStartPin();
   addRouteButton.setAttribute("aria-pressed", "false");
-  addRouteButton.textContent = "Create route";
+  const rl1 = addRouteButton.querySelector(".action-label"); if (rl1) rl1.textContent = "Route";
   setRouteMode(null);
   communityStatus.textContent = message;
 }
@@ -1987,7 +1987,7 @@ function handleCommunityPinSelection(pinId) {
   if (!pendingRouteStartId) {
     pendingRouteStartId = pinId;
     setSelectedRouteStartPin(pinId);
-    addRouteButton.textContent = "Pick end";
+    const rl2 = addRouteButton.querySelector(".action-label"); if (rl2) rl2.textContent = "Pick end";
     communityStatus.textContent = `Start selected: ${pin.name}. Choose the destination.`;
     setRouteMode(`Start selected: ${pin.name}. Now choose the destination.`, "Step 2 of 2", "Choose destination");
     renderCommunityPins(latestCommunityPins);
@@ -2003,7 +2003,7 @@ function handleCommunityPinSelection(pinId) {
   pendingRouteEndId = pinId;
   createRouteMode = false;
   addRouteButton.setAttribute("aria-pressed", "false");
-  addRouteButton.textContent = "Create route";
+  const rl3 = addRouteButton.querySelector(".action-label"); if (rl3) rl3.textContent = "Route";
   showPendingRoutePreview(communityPinsById.get(pendingRouteStartId), pin);
   setRouteMode(`Previewing: ${communityPinsById.get(pendingRouteStartId).name} to ${pin.name}. Save or cancel this route.`, "Ready to save", "Route preview");
   openRouteDialog(pendingRouteStartId, pendingRouteEndId);
@@ -2809,7 +2809,7 @@ async function saveCommunityRoute() {
     routeDraftPathPoints = [];
     updateRoutePathStatus();
     addRouteButton.setAttribute("aria-pressed", "true");
-    addRouteButton.textContent = "Pick end";
+    const rl4 = addRouteButton.querySelector(".action-label"); if (rl4) rl4.textContent = "Pick end";
     setSelectedRouteStartPin(savedStartPinId);
     setRouteMode(`Route saved from ${savedStartPin.name}. Choose another destination to add another route from this terminal.`, "Step 2 of 2", "Choose another destination");
     communityStatus.textContent = `Route saved. ${savedStartPin.name} is still selected for another route.`;
@@ -3173,7 +3173,6 @@ addRouteButton.addEventListener("click", () => {
   addRouteButton.setAttribute("aria-pressed", String(createRouteMode));
   const addRouteLabel = addRouteButton.querySelector(".action-label");
   if (addRouteLabel) addRouteLabel.textContent = createRouteMode ? "Pick start" : "Route";
-  else addRouteButton.textContent = createRouteMode ? "Pick start" : "Route";
 
   if (createRouteMode) {
     clearSelectedRouteStartPin();
