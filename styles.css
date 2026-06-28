@@ -3194,9 +3194,42 @@ summary {
 }
 
 .maplibregl-popup-content {
-  border: 3px solid var(--lapit-ink);
+  border: 1.5px solid rgba(21, 21, 21, 0.12);
   border-radius: 18px;
-  box-shadow: 6px 6px 0 var(--lapit-ink), 0 18px 45px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.18);
+}
+
+/* Leaflet popup — used for the user location "You are here" marker */
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  border: none !important;
+  border-radius: 999px !important;
+  background: #0f172a !important;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.28) !important;
+  color: #ffffff;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 7px 14px !important;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+  box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+  display: none !important;
 }
 
 .spot-popup-card h3 {
