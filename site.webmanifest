@@ -1,0 +1,19 @@
+{
+  "name": "Lapit Transit Finder",
+  "short_name": "Lapit",
+  "description": "Find nearby transit spots and community routes across the Philippines.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#dbeafe",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

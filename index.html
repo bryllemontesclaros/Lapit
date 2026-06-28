@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en-PH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Lapit | Philippines Transit Map and Community Routes</title>
+  <meta name="description" content="Find nearby transit in the Philippines with Lapit: built-in stations and terminals, community pins, jeepney routes, tricycle terminals, UV/van stops, ferry stations, and transfer points.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#f8d56b">
+  <meta name="application-name" content="Lapit">
+  <meta name="apple-mobile-web-app-title" content="Lapit">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="geo.region" content="PH">
+  <meta name="geo.placename" content="Philippines">
+  <link rel="canonical" href="https://lapit-jade.vercel.app/">
+  <link rel="manifest" href="./site.webmanifest">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Lapit">
+  <meta property="og:title" content="Lapit | Philippines Transit Map and Community Routes">
+  <meta property="og:description" content="Find nearby stations, terminals, community transit pins, and connected routes across the Philippines.">
+  <meta property="og:url" content="https://lapit-jade.vercel.app/">
+  <meta property="og:image" content="https://lapit-jade.vercel.app/og-image.svg">
+  <meta property="og:image:alt" content="Lapit transit map preview for the Philippines">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lapit | Philippines Transit Map">
+  <meta name="twitter:description" content="Find nearby stations, terminals, community transit pins, and connected routes across the Philippines.">
+  <meta name="twitter:image" content="https://lapit-jade.vercel.app/og-image.svg">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Lapit",
+      "url": "https://lapit-jade.vercel.app/",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "Any modern web browser",
+      "description": "A Philippines transit map for nearby stations, terminals, community pins, and connected local routes.",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Philippines"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "PHP"
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://server.arcgisonline.com">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="./styles.css?v=53">
+</head>
+<body>
+  <main class="app" aria-label="Nearby transit finder">
+    <div id="map" class="map" aria-label="Map showing your location and nearby transit stations">
+      <div id="map-loading" class="map-loading" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Loading Lapit map...</span>
+      </div>
+
+      <section class="map-brand" aria-label="Lapit map">
+        <span class="brand-mark" aria-hidden="true">LP</span>
+        <div>
+          <strong>Lapit</strong>
+          <span>Ride like a local</span>
+        </div>
+      </section>
+
+      <section class="map-account" aria-labelledby="account-title">
+        <h2 id="account-title" class="sr-only">Account</h2>
+        <button id="account-menu-button" class="account-menu-button" type="button" aria-expanded="false" aria-controls="account-menu">
+          Guest mode
+        </button>
+        <div id="account-menu" class="account-menu" hidden>
+          <p id="auth-status" class="status">Guest browsing. Sign in to add and verify spots.</p>
+          <button id="auth-button" class="secondary-button compact-button" type="button">Sign in / create account</button>
+          <button id="exit-guest-button" class="secondary-button compact-button exit-guest-button" type="button">Exit guest mode</button>
+          <div class="account-legal-links" aria-label="Legal links">
+            <a class="legal-link-button" href="./privacy.html" data-legal-page="privacy">Privacy</a>
+            <a class="legal-link-button" href="./terms.html" data-legal-page="terms">Terms</a>
+            <a class="legal-link-button" href="./data-sources.html" data-legal-page="data">Data</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="map-actions" aria-label="Map actions">
+        <button id="my-location-button" class="map-action-button my-location-button" type="button">
+          My location
+        </button>
+
+        <button id="add-pin-button" class="map-action-button add-pin-button" type="button" aria-pressed="false">
+          Add pin
+        </button>
+
+        <button id="add-route-button" class="map-action-button add-route-button" type="button" aria-pressed="false">
+          Create route
+        </button>
+      </div>
+
+      <div id="route-mode-banner" class="route-mode-banner is-hidden" role="status">
+        <div class="route-mode-copy">
+          <span id="route-mode-step" class="route-mode-step">Step 1 of 2</span>
+          <strong id="route-mode-title">Choose starting point</strong>
+          <span id="route-mode-text">Select any transit spot on the map.</span>
+        </div>
+        <button id="cancel-route-mode" type="button">Cancel</button>
+      </div>
+
+      <details class="map-legend" aria-label="Map legend" open>
+        <summary>Legend</summary>
+        <div class="legend-items">
+          <span><i class="legend-dot train-pin-dot"></i>Train</span>
+          <span><i class="legend-dot bus-pin-dot"></i>Bus</span>
+          <span><i class="legend-dot jeepney-pin-dot"></i>Jeepney</span>
+          <span><i class="legend-dot tricycle-pin-dot"></i>Tricycle</span>
+          <span><i class="legend-dot terminal-pin-dot"></i>Terminal</span>
+          <span><i class="legend-dot uv-pin-dot"></i>UV/Van</span>
+          <span><i class="legend-dot ferry-pin-dot"></i>Ferry</span>
+          <span><i class="legend-dot transfer-pin-dot"></i>Transfer</span>
+          <span><i class="legend-dot other-pin-dot"></i>Other</span>
+        </div>
+        <p class="legend-updated">
+          <time datetime="2026-05-24">Map updated May 24, 2026</time>
+        </p>
+      </details>
+
+    </div>
+
+    <section id="onboarding-overlay" class="onboarding-overlay" aria-labelledby="onboarding-title">
+      <div class="landing-ticker" aria-hidden="true">
+        <span>Lapit sa sakayan - find the route locals actually use - jeepney - tricycle - UV - bus - train - ferry -</span>
+        <span>Lapit sa sakayan - find the route locals actually use - jeepney - tricycle - UV - bus - train - ferry -</span>
+      </div>
+      <div class="landing-shell">
+        <div class="landing-copy">
+          <p class="eyebrow">Lapit local transit map</p>
+          <h1 id="onboarding-title">
+            Stop guessing the sakayan.
+            <span>Ride like you live here.</span>
+          </h1>
+          <p class="onboarding-copy">
+            Find jeepney terminals, tricycle lines, UV vans, ferry stops, train entrances, and transfer points that regular maps usually miss.
+          </p>
+
+          <div class="landing-stats" aria-label="Lapit coverage">
+            <span><strong>139</strong> built-in spots</span>
+            <span><strong>PH-wide</strong> starter layer</span>
+            <span><strong>Live</strong> local pins</span>
+          </div>
+
+          <ul class="landing-feature-list" aria-label="Lapit features">
+            <li>Nearest sakayan sorted by distance</li>
+            <li>Community pins for routes locals know</li>
+            <li>Map labels for trains, buses, jeepneys, tricycles, UVs, ferries, and terminals</li>
+          </ul>
+        </div>
+
+        <div class="onboarding-card">
+          <h2>Open the local map.</h2>
+          <p>
+            Browse as a guest, or sign in to add real transit spots for everyone.
+          </p>
+          <div class="onboarding-actions">
+            <button id="onboarding-guest" class="primary-button" type="button">Enter as guest</button>
+            <button id="onboarding-sign-in" class="secondary-button" type="button">Sign in / create account</button>
+          </div>
+          <div class="landing-mini-grid" aria-label="How Lapit works">
+            <span><strong>1</strong>Allow location</span>
+            <span><strong>2</strong>Find nearby rides</span>
+            <span><strong>3</strong>Add local spots</span>
+          </div>
+          <p class="landing-note">Guests can view the full map. Accounts can add, confirm, and report community pins.</p>
+          <nav class="landing-legal-links" aria-label="Legal and app information">
+            <a class="legal-link-button" href="./privacy.html" data-legal-page="privacy">Privacy</a>
+            <a class="legal-link-button" href="./terms.html" data-legal-page="terms">Terms</a>
+            <a class="legal-link-button" href="./community-guidelines.html" data-legal-page="guidelines">Guidelines</a>
+            <a class="legal-link-button" href="./data-sources.html" data-legal-page="data">Data sources</a>
+            <a class="legal-link-button" href="./contact.html" data-legal-page="contact">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <noscript>
+      <section class="seo-fallback" aria-labelledby="seo-fallback-title">
+        <h2 id="seo-fallback-title">Lapit Philippines Transit Map</h2>
+        <p>Lapit helps people find nearby transit spots across the Philippines, including train stations, bus terminals, ferry stations, jeepney terminals, tricycle terminals, UV/van stops, and transfer points.</p>
+        <p>The interactive map needs JavaScript and browser location access. You can still read our <a href="./privacy.html">Privacy Policy</a>, <a href="./terms.html">Terms of Use</a>, <a href="./community-guidelines.html">Community Guidelines</a>, <a href="./data-sources.html">Data Sources</a>, and <a href="./contact.html">Contact</a> pages.</p>
+      </section>
+    </noscript>
+
+    <section class="panel" aria-labelledby="nearest-title">
+      <div class="nearest">
+        <header class="section-header">
+          <div>
+            <h2 id="nearest-title">Nearest Transit</h2>
+            <p id="status" class="status">Finding your current location...</p>
+          </div>
+        </header>
+
+        <div id="route-info-card" class="route-info-card is-hidden" role="status" aria-live="polite">
+          <span class="route-info-kicker">Connected route</span>
+          <strong id="route-info-title">Route selected</strong>
+          <span id="route-info-meta">Start to destination</span>
+        </div>
+
+        <ul id="station-list" class="station-list" aria-live="polite">
+          <li class="message">
+            <strong>Finding nearest transit spots...</strong>
+            Allow location access when your browser asks.
+          </li>
+        </ul>
+
+        <section class="community-section" aria-labelledby="community-title">
+          <div class="section-header compact">
+            <div>
+              <h2 id="community-title">Community Spots</h2>
+              <p id="community-status" class="status">Loading community spots...</p>
+            </div>
+          </div>
+
+          <div class="pin-filters" aria-label="Filter community spots">
+            <button class="filter-button is-active" type="button" data-filter="All">All</button>
+            <button class="filter-button" type="button" data-filter="Jeepney">Jeepney</button>
+            <button class="filter-button" type="button" data-filter="Bus">Bus</button>
+            <button class="filter-button" type="button" data-filter="Train">Train</button>
+            <button class="filter-button" type="button" data-filter="Tricycle">Tricycle</button>
+            <button class="filter-button" type="button" data-filter="Terminal">Terminal</button>
+            <button class="filter-button" type="button" data-filter="UV/Van">UV/Van</button>
+            <button class="filter-button" type="button" data-filter="Ferry">Ferry</button>
+            <button class="filter-button" type="button" data-filter="Transfer">Transfer</button>
+            <button class="filter-button" type="button" data-filter="Other">Other</button>
+          </div>
+
+          <ul id="community-list" class="community-list" aria-live="polite">
+            <li class="message">Community spots will appear here.</li>
+          </ul>
+        </section>
+      </div>
+
+    </section>
+
+    <dialog id="confirm-pin-dialog" class="pin-dialog" aria-labelledby="confirm-pin-title">
+      <form method="dialog" class="pin-form">
+        <header>
+          <h2 id="confirm-pin-title">Confirm pin location?</h2>
+          <p id="confirm-pin-location" class="status">Check the temporary marker on the map.</p>
+        </header>
+
+        <p class="confirm-copy">
+          This location will be used for the community spot. You can cancel and tap the map again if it is not right.
+        </p>
+
+        <footer class="pin-actions">
+          <button id="reject-pin-location" class="secondary-button" type="button">Choose again</button>
+          <button id="confirm-pin-location-button" class="primary-button" type="button">Confirm location</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="pin-dialog" class="pin-dialog" aria-labelledby="pin-dialog-title">
+      <form id="pin-form" method="dialog" class="pin-form">
+        <header>
+          <h2 id="pin-dialog-title">Add Community Spot</h2>
+          <p id="pin-location" class="status">Choose a location on the map.</p>
+        </header>
+
+        <label>
+          Pin type
+          <select id="pin-type" required>
+            <option value="Jeepney Terminal">Jeepney Terminal</option>
+            <option value="Jeepney Stop">Jeepney Stop</option>
+            <option value="Jeepney Route">Jeepney Route</option>
+            <option value="Bus Terminal">Bus Terminal</option>
+            <option value="Bus Stop">Bus Stop</option>
+            <option value="Train Station">Train Station</option>
+            <option value="Train Entrance">Train Entrance</option>
+            <option value="Tricycle Terminal">Tricycle Terminal</option>
+            <option value="UV Express Terminal">UV Express Terminal</option>
+            <option value="Ferry Station">Ferry Station</option>
+            <option value="Van Terminal">Van Terminal</option>
+            <option value="Terminal">Terminal</option>
+            <option value="Transfer Point">Transfer Point</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Name
+          <input id="pin-name" type="text" maxlength="80" required placeholder="Example: Cubao jeepney stop">
+        </label>
+
+        <label>
+          Route
+          <input id="pin-route" type="text" maxlength="120" placeholder="Example: Cubao - Divisoria">
+        </label>
+
+        <label>
+          Note
+          <textarea id="pin-note" maxlength="240" rows="3" placeholder="Optional details"></textarea>
+        </label>
+
+        <footer class="pin-actions">
+          <button id="cancel-pin" class="secondary-button" type="button">Cancel</button>
+          <button id="delete-pin" class="danger-button" type="button" hidden>Delete</button>
+          <button id="save-pin" class="primary-button" type="submit">Save pin</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="route-dialog" class="pin-dialog" aria-labelledby="route-dialog-title">
+      <form id="route-form" method="dialog" class="pin-form">
+        <header>
+          <h2 id="route-dialog-title">Connect Transit Spots</h2>
+          <p id="route-message" class="status">Choose two transit spots to connect.</p>
+        </header>
+
+        <label>
+          Route type
+          <select id="route-type" required>
+            <option value="Jeepney">Jeepney</option>
+            <option value="Bus">Bus</option>
+            <option value="Train">Train</option>
+            <option value="Walk Transfer">Walk Transfer</option>
+            <option value="Tricycle">Tricycle</option>
+            <option value="UV/Van">UV/Van</option>
+            <option value="Ferry">Ferry</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Route name
+          <input id="route-name" type="text" maxlength="120" required placeholder="Example: DOST Terminal to Pasay LRT">
+        </label>
+
+        <section class="route-path-tools" aria-label="Route path tools">
+          <p id="route-path-status" class="status">Straight path. Add points to trace the real road or rail path.</p>
+          <div class="pin-actions">
+            <button id="add-route-path-point" class="secondary-button" type="button">Add path point</button>
+            <button id="reset-route-path" class="secondary-button" type="button">Reset path</button>
+          </div>
+        </section>
+
+        <footer class="pin-actions">
+          <button id="cancel-route" class="secondary-button" type="button">Cancel</button>
+          <button id="delete-route" class="danger-button" type="button" hidden>Delete</button>
+          <button id="save-route" class="primary-button" type="submit">Save route</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="auth-dialog" class="pin-dialog" aria-labelledby="auth-dialog-title">
+      <form id="auth-form" method="dialog" class="pin-form">
+        <header>
+          <h2 id="auth-dialog-title">Sign in to add pins</h2>
+          <p id="auth-message" class="status">Use your email and password to sign in or create an account.</p>
+        </header>
+
+        <label>
+          Email
+          <input id="auth-email" type="email" required placeholder="you@example.com">
+        </label>
+
+        <label>
+          Password
+          <input id="auth-password" type="password" minlength="6" required placeholder="At least 6 characters">
+        </label>
+
+        <footer class="pin-actions">
+          <button id="auth-cancel" class="secondary-button" type="button">Continue as guest</button>
+          <button id="auth-sign-up" class="secondary-button" type="button">Create account</button>
+          <button class="primary-button" type="submit">Sign in</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="report-dialog" class="pin-dialog" aria-labelledby="report-dialog-title">
+      <form id="report-form" method="dialog" class="pin-form">
+        <header>
+          <h2 id="report-dialog-title">Report community spot</h2>
+          <p id="report-message" class="status">Tell us what looks wrong.</p>
+        </header>
+
+        <label>
+          Reason
+          <select id="report-reason" required>
+            <option value="Wrong location">Wrong location</option>
+            <option value="Wrong connection">Wrong connection</option>
+            <option value="Duplicate">Duplicate</option>
+            <option value="Spam">Spam</option>
+            <option value="Closed or moved">Closed or moved</option>
+          </select>
+        </label>
+
+        <footer class="pin-actions">
+          <button id="report-cancel" class="secondary-button" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Submit report</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="legal-dialog" class="legal-dialog" aria-labelledby="legal-dialog-title">
+      <article class="legal-content">
+        <header>
+          <p class="eyebrow">Lapit</p>
+          <h2 id="legal-dialog-title">Legal</h2>
+          <button id="legal-close" class="legal-close" type="button" aria-label="Close legal page">Close</button>
+        </header>
+
+        <section class="legal-page" data-legal-content="privacy">
+          <h3>Privacy Policy</h3>
+          <p>Last updated May 22, 2026.</p>
+          <p>Lapit uses your browser location only when you allow location access. Your location is used in the app to show nearby transit spots and calculate distance. Lapit does not intentionally store your live location in Firebase.</p>
+          <p>If you create an account, Firebase Auth stores your email and authentication details. Community pins, route connections, confirmations, reports, and moderation data may be stored so everyone can see shared transit information.</p>
+          <p>The app uses MapLibre, OpenStreetMap-related map data, Esri map tiles, Firebase, and browser APIs. These services may receive normal technical information such as IP address, device/browser details, and requested map areas.</p>
+          <p>Do not submit private personal information in pin names, notes, reports, or routes. Community submissions are intended to be public.</p>
+        </section>
+
+        <section class="legal-page" data-legal-content="terms">
+          <h3>Terms of Use</h3>
+          <p>Lapit is a community transit discovery prototype. Routes, pins, distances, and directions may be incomplete, inaccurate, outdated, or unsafe. Always follow local rules, official signs, operator instructions, and your own judgment while traveling.</p>
+          <p>You may browse as a guest. You need an account to add, confirm, report, edit, or delete community content. By submitting content, you confirm that you have the right to share it and that it is not copied from restricted sources.</p>
+          <p>Lapit may hide, edit, reject, or delete pins, routes, accounts, or reports that are inaccurate, abusive, spammy, unsafe, or otherwise harmful to the community.</p>
+        </section>
+
+        <section class="legal-page" data-legal-content="guidelines">
+          <h3>Community Guidelines</h3>
+          <p>Add real transit spots only: terminals, stops, station entrances, transfer points, ferry stations, UV/van terminals, tricycle/TODA terminals, jeepney terminals, and route connections.</p>
+          <p>Place pins as accurately as possible. Use clear names, avoid duplicates, and do not add jokes, ads, private addresses, harassment, or misleading routes.</p>
+          <p>Use reports for wrong locations, wrong connections, duplicates, spam, or closed/moved spots. Community pins may remain unverified until reviewed or confirmed.</p>
+        </section>
+
+        <section class="legal-page" data-legal-content="data">
+          <h3>About Data Sources</h3>
+          <p>Lapit combines built-in starter pins, OpenStreetMap-derived nearby transit discovery, and community-submitted pins/routes. Built-in pins are a starter layer, not a complete official database.</p>
+          <p>OpenStreetMap data is contributed by the OSM community. Map display uses MapLibre with map tiles and attribution shown on the map. Lapit does not use scraped Google Maps data as built-in pins.</p>
+          <p>Community data can be incomplete or wrong. The best version of Lapit improves through confirmations, reports, and admin moderation.</p>
+        </section>
+
+        <section class="legal-page" data-legal-content="contact">
+          <h3>Contact and Reports</h3>
+          <p>For prototype support, data corrections, privacy questions, or moderation requests, contact the Lapit maintainer.</p>
+          <p>Email: <a href="mailto:montesclarosbrylle@gmail.com">montesclarosbrylle@gmail.com</a></p>
+          <p>When reporting a map issue, include the pin or route name, city/province, what is wrong, and the correct information if you know it.</p>
+        </section>
+      </article>
+    </dialog>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="./maplibre-adapter.js?v=6"></script>
+  <script src="./firebase-config.js?v=1"></script>
+  <script src="./app.js?v=78"></script>
+</body>
+</html>

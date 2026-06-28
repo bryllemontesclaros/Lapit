@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Admin helper
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'montesclarosbrylle@gmail.com';
+    }
+
+    // Pins security
+    match /pins/{pinId} {
+      allow read: if resource.data.status in ['unverified', 'approved'] || isAdmin();
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid 
+                    && request.resource.data.status == 'unverified';
+      allow update: if (request.auth != null 
+                    && resource.data.created_by == request.auth.uid 
+                    && resource.data.status == 'unverified'
+                    && request.resource.data.created_by == request.auth.uid
+                    && request.resource.data.status == 'unverified')
+                    || isAdmin();
+      allow delete: if (request.auth != null && resource.data.created_by == request.auth.uid) || isAdmin();
+    }
+
+    // Pin reports security
+    match /pin_reports/{reportId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid
+                    && reportId == (request.resource.data.pin_id + '_' + request.auth.uid);
+    }
+
+    // Pin confirmations security
+    match /pin_confirmations/{confirmationId} {
+      allow read: if true;
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid
+                    && confirmationId == (request.resource.data.pin_id + '_' + request.auth.uid);
+    }
+
+    // Community routes security
+    match /community_routes/{routeId} {
+      allow read: if resource.data.status in ['unverified', 'approved'] || isAdmin();
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid 
+                    && request.resource.data.status == 'unverified';
+      allow update: if (request.auth != null 
+                    && resource.data.created_by == request.auth.uid 
+                    && resource.data.status == 'unverified'
+                    && request.resource.data.created_by == request.auth.uid
+                    && request.resource.data.status == 'unverified')
+                    || isAdmin();
+      allow delete: if (request.auth != null && resource.data.created_by == request.auth.uid) || isAdmin();
+    }
+
+    // Route reports security
+    match /route_reports/{reportId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid
+                    && reportId == (request.resource.data.route_id + '_' + request.auth.uid);
+    }
+
+    // Route confirmations security
+    match /route_confirmations/{confirmationId} {
+      allow read: if true;
+      allow create: if request.auth != null 
+                    && request.resource.data.created_by == request.auth.uid
+                    && confirmationId == (request.resource.data.route_id + '_' + request.auth.uid);
+    }
+  }
+}
