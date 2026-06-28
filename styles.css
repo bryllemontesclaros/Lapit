@@ -367,7 +367,7 @@ body {
 
 .nearby-summary-pill {
   position: absolute;
-  top: max(70px, calc(env(safe-area-inset-top) + 60px));
+  top: max(90px, calc(env(safe-area-inset-top) + 80px));
   left: 50%;
   transform: translateX(-50%) translateY(-10px);
   z-index: 800;
@@ -4404,7 +4404,7 @@ summary {
   .map-legend {
     left: auto !important;
     right: 12px !important;
-    top: max(80px, calc(env(safe-area-inset-top) + 70px)) !important;
+    top: max(90px, calc(env(safe-area-inset-top) + 80px)) !important;
     bottom: auto !important;
   }
 }

@@ -3919,8 +3919,11 @@ function calculateMultiLegRoute(destLat, destLng, destName) {
     color: '#64748b', weight: 4, dashArray: '8, 8', opacity: 0.8
   }).addTo(map);
   
-  // Push to activeRouteLines to be cleared later
-  activeRouteLines.push(leg1, leg2Casing, leg2, leg3);
+  // Add to activeRouteLayers to be cleared later
+  activeRouteLayers.addLayer(leg1);
+  activeRouteLayers.addLayer(leg2Casing);
+  activeRouteLayers.addLayer(leg2);
+  activeRouteLayers.addLayer(leg3);
   
   // Fit map bounds
   const bounds = L.latLngBounds([
