@@ -4222,7 +4222,9 @@ summary {
   }
 
   .account-menu-button {
-    max-width: 150px;
+    max-width: 105px;
+    padding: 0 8px;
+    font-size: 0.75rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -4354,10 +4356,15 @@ summary {
 
 /* --- MOBILE UX OVERHAUL --- */
 @media (max-width: 899px) {
+  .map-brand {
+    display: none !important;
+  }
+
   .map-actions {
     left: auto !important;
     right: 12px !important;
-    bottom: calc(44dvh + 24px + env(safe-area-inset-bottom)) !important;
+    top: max(170px, calc(env(safe-area-inset-top) + 160px)) !important;
+    bottom: auto !important;
     transform: none !important;
     flex-direction: column !important;
     gap: 8px !important;
@@ -4421,6 +4428,15 @@ summary {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+@media (max-width: 899px) {
+  .global-search-container {
+    width: calc(100% - 130px) !important;
+    left: 14px !important;
+    transform: none !important;
+    top: max(14px, env(safe-area-inset-top)) !important;
+  }
 }
 
 .search-input-wrapper {
