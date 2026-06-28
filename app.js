@@ -239,6 +239,9 @@ const stationList = document.querySelector("#station-list");
 const statusText = document.querySelector("#status");
 const mapLoading = document.querySelector("#map-loading");
 const nearbySummaryPill = document.querySelector("#nearby-summary-pill");
+const destinationSearchInput = document.querySelector("#destination-search-input");
+const clearSearchButton = document.querySelector("#clear-search-button");
+const searchResultsDropdown = document.querySelector("#search-results-dropdown");
 const addPinButton = document.querySelector("#add-pin-button");
 const addRouteButton = document.querySelector("#add-route-button");
 const myLocationButton = document.querySelector("#my-location-button");
@@ -3740,4 +3743,194 @@ if (closeRouteDrawerBtn) {
   closeRouteDrawerBtn.addEventListener("click", () => {
     clearActiveRouteLines();
   });
+}
+
+// --- DESTINATION SEARCH & ROUTING ---
+let destinationMarker = null;
+let searchDebounceTimeout = null;
+
+if (destinationSearchInput) {
+  destinationSearchInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+    if (query.length > 2) {
+      clearSearchButton.classList.remove("is-hidden");
+      clearTimeout(searchDebounceTimeout);
+      searchDebounceTimeout = setTimeout(() => {
+        fetchNominatimResults(query);
+      }, 500);
+    } else {
+      searchResultsDropdown.innerHTML = "";
+      searchResultsDropdown.classList.add("is-hidden");
+      clearSearchButton.classList.add("is-hidden");
+    }
+  });
+
+  clearSearchButton.addEventListener("click", () => {
+    destinationSearchInput.value = "";
+    searchResultsDropdown.innerHTML = "";
+    searchResultsDropdown.classList.add("is-hidden");
+    clearSearchButton.classList.add("is-hidden");
+    if (destinationMarker) {
+      map.removeLayer(destinationMarker);
+      destinationMarker = null;
+    }
+    clearActiveRouteLines();
+    if (routeModeBanner && routeModeBanner.dataset.isSearchRoute === "true") {
+      routeModeBanner.classList.add("is-hidden");
+      routeModeBanner.dataset.isSearchRoute = "false";
+    }
+  });
+}
+
+async function fetchNominatimResults(query) {
+  try {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=ph&limit=5`);
+    const data = await response.json();
+    
+    searchResultsDropdown.innerHTML = "";
+    
+    if (data && data.length > 0) {
+      data.forEach(place => {
+        const li = document.createElement("li");
+        li.className = "search-result-item";
+        
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "search-result-title";
+        const parts = place.display_name.split(", ");
+        titleSpan.textContent = parts[0];
+        
+        const addressSpan = document.createElement("span");
+        addressSpan.className = "search-result-address";
+        addressSpan.textContent = parts.slice(1).join(", ");
+        
+        li.appendChild(titleSpan);
+        li.appendChild(addressSpan);
+        
+        li.addEventListener("click", () => {
+          handleDestinationSelection(place);
+        });
+        
+        searchResultsDropdown.appendChild(li);
+      });
+      searchResultsDropdown.classList.remove("is-hidden");
+    } else {
+      searchResultsDropdown.innerHTML = `<li class="search-result-item"><span class="search-result-address">No results found in the Philippines.</span></li>`;
+      searchResultsDropdown.classList.remove("is-hidden");
+    }
+  } catch (error) {
+    console.error("Nominatim search error:", error);
+  }
+}
+
+function handleDestinationSelection(place) {
+  destinationSearchInput.value = place.display_name.split(", ")[0];
+  searchResultsDropdown.innerHTML = "";
+  searchResultsDropdown.classList.add("is-hidden");
+  
+  const destLat = parseFloat(place.lat);
+  const destLng = parseFloat(place.lon);
+  
+  if (destinationMarker) {
+    map.removeLayer(destinationMarker);
+  }
+  
+  const destIcon = L.divIcon({
+    html: `
+      <div style="background: #e11d48; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+      </div>
+    `,
+    className: "",
+    iconSize: [24, 24],
+    iconAnchor: [12, 24]
+  });
+  
+  destinationMarker = L.marker([destLat, destLng], { icon: destIcon }).addTo(map);
+  
+  calculateMultiLegRoute(destLat, destLng, place.display_name.split(", ")[0]);
+}
+
+function calculateMultiLegRoute(destLat, destLng, destName) {
+  const startLat = userLatLng ? userLatLng.lat : map.getCenter().lat;
+  const startLng = userLatLng ? userLatLng.lng : map.getCenter().lng;
+  
+  let nearestA = null;
+  let minDistanceA = Infinity;
+  let nearestB = null;
+  let minDistanceB = Infinity;
+  
+  stations.forEach(spot => {
+    const distA = calculateDistanceMeters(startLat, startLng, spot.lat, spot.lng);
+    if (distA < minDistanceA) {
+      minDistanceA = distA;
+      nearestA = spot;
+    }
+    
+    const distB = calculateDistanceMeters(destLat, destLng, spot.lat, spot.lng);
+    if (distB < minDistanceB) {
+      minDistanceB = distB;
+      nearestB = spot;
+    }
+  });
+  
+  if (!nearestA || !nearestB) {
+    console.error("Could not find transit spots to create a route.");
+    return;
+  }
+  
+  clearActiveRouteLines();
+  
+  // Create polylines
+  const leg1 = L.polyline([[startLat, startLng], [nearestA.lat, nearestA.lng]], {
+    className: "route-line route-line-walking",
+    color: '#64748b', weight: 4, dashArray: '8, 8', opacity: 0.8
+  }).addTo(map);
+  
+  const leg2Casing = L.polyline([[nearestA.lat, nearestA.lng], [nearestB.lat, nearestB.lng]], {
+    className: "route-line route-line-casing route-line-preview-casing",
+    color: '#ffffff', weight: 10, opacity: 1, lineCap: "round", lineJoin: "round"
+  }).addTo(map);
+
+  const leg2 = L.polyline([[nearestA.lat, nearestA.lng], [nearestB.lat, nearestB.lng]], {
+    className: "route-line route-line-core route-line-preview",
+    color: '#0f172a', weight: 6, opacity: 0.9, lineCap: "round", lineJoin: "round"
+  }).addTo(map);
+  
+  const leg3 = L.polyline([[nearestB.lat, nearestB.lng], [destLat, destLng]], {
+    className: "route-line route-line-walking",
+    color: '#64748b', weight: 4, dashArray: '8, 8', opacity: 0.8
+  }).addTo(map);
+  
+  // Push to activeRouteLines to be cleared later
+  activeRouteLines.push(leg1, leg2Casing, leg2, leg3);
+  
+  // Fit map bounds
+  const bounds = L.latLngBounds([
+    [startLat, startLng],
+    [nearestA.lat, nearestA.lng],
+    [nearestB.lat, nearestB.lng],
+    [destLat, destLng]
+  ]);
+  
+  const isMobile = window.innerWidth < 900;
+  map.fitBounds(bounds, { padding: isMobile ? [40, 40] : [80, 80] });
+  
+  // Show UI Banner
+  if (routeModeBanner) {
+    routeModeStep.textContent = "Suggested Route";
+    routeModeTitle.textContent = `To ${destName}`;
+    routeModeText.textContent = `Walk to ${nearestA.name}, take transit to ${nearestB.name}, then walk to destination.`;
+    routeModeBanner.classList.remove("is-hidden");
+    routeModeBanner.dataset.isSearchRoute = "true";
+    
+    if (cancelRouteModeButton) {
+      cancelRouteModeButton.textContent = "Clear Route";
+      cancelRouteModeButton.onclick = () => {
+        clearSearchButton.click();
+        // Restore standard cancel button behavior
+        cancelRouteModeButton.textContent = "Cancel";
+        cancelRouteModeButton.onclick = null; 
+      };
+    }
+  }
 }

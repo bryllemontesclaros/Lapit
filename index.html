@@ -71,6 +71,23 @@
         </div>
       </section>
 
+      <div class="global-search-container" aria-label="Destination search">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="destination-search-input" placeholder="Where are you going?" aria-label="Search destination" autocomplete="off" />
+          <button id="clear-search-button" class="clear-search-button is-hidden" type="button" aria-label="Clear search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <ul id="search-results-dropdown" class="search-results-dropdown is-hidden" role="listbox"></ul>
+      </div>
+
       <section class="map-account" aria-labelledby="account-title">
         <h2 id="account-title" class="sr-only">Account</h2>
         <button id="account-menu-button" class="account-menu-button" type="button" aria-expanded="false" aria-controls="account-menu">
