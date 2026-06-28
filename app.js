@@ -2615,6 +2615,24 @@ async function saveCommunityPin() {
     return false;
   }
 
+  // --- Anti-spam: proximity check (soft warning if > 50 km from user) ---
+  if (userLatLng && !isAdminUser() && savePinButton.dataset.proximityWarned !== "true") {
+    const [uLat, uLng] = userLatLng;
+    const dLat = (pinPayload.lat - uLat) * (Math.PI / 180);
+    const dLng = (pinPayload.lng - uLng) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(uLat * Math.PI / 180) * Math.cos(pinPayload.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+    const distanceKm = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    if (distanceKm > 50) {
+      pinLocation.textContent = `⚠️ This pin is ${Math.round(distanceKm)} km from your location. Only add spots you can personally verify.`;
+      savePinButton.dataset.proximityWarned = "true";
+      savePinButton.textContent = "Save anyway";
+      return false;
+    }
+  }
+  // Reset proximity warning flag on successful save attempt
+  savePinButton.dataset.proximityWarned = "";
+
   try {
     if (editingPinId) {
       await dbClient.collection("pins").doc(editingPinId).update(pinPayload);
@@ -3077,7 +3095,7 @@ function jumpToCurrentLocation() {
   requestLocation();
 }
 
-addPinButton.addEventListener("click", () => {
+addPinButton.addEventListener("click", async () => {
   if (!dbClient) {
     communityStatus.textContent = "Connect Firebase before adding community spots.";
     communityList.innerHTML = '<li class="message">Add your Firebase config to firebase-config.js, then reload.</li>';
@@ -3087,6 +3105,34 @@ addPinButton.addEventListener("click", () => {
   if (!currentUser) {
     openAuthDialog("Sign in or create an account to add community spots. You can keep browsing as a guest.");
     return;
+  }
+
+  // --- Anti-spam: account age check (must be at least 1 hour old) ---
+  const creationTime = new Date(currentUser.metadata.creationTime).getTime();
+  const accountAgeMs = Date.now() - creationTime;
+  const ONE_HOUR_MS = 60 * 60 * 1000;
+  if (accountAgeMs < ONE_HOUR_MS && !isAdminUser()) {
+    const minutesLeft = Math.ceil((ONE_HOUR_MS - accountAgeMs) / 60000);
+    communityStatus.textContent = `New accounts can add spots after 1 hour. Ready in ${minutesLeft} min.`;
+    return;
+  }
+
+  // --- Anti-spam: rate limit (max 5 pins per user per 24 hours) ---
+  if (!isAdminUser()) {
+    try {
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const recentSnap = await dbClient
+        .collection("pins")
+        .where("created_by", "==", currentUser.uid)
+        .where("created_at", ">=", oneDayAgo)
+        .get();
+      if (recentSnap.size >= 5) {
+        communityStatus.textContent = "You've reached the 5 pin limit per 24 hours. Try again tomorrow.";
+        return;
+      }
+    } catch (_err) {
+      // If rate limit check fails, allow the action rather than block
+    }
   }
 
   createRouteMode = false;
