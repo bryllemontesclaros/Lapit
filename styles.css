@@ -3486,14 +3486,29 @@ summary {
   font-weight: 950;
 }
 
+.maplibregl-popup-content:has(.user-popup-card) {
+  border: none !important;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.3) !important;
+  border-radius: 999px !important;
+  background: #1e293b !important;
+}
+
+.maplibregl-popup:has(.user-popup-card) .maplibregl-popup-tip {
+  display: block !important;
+  border-top-color: #1e293b !important;
+}
+
+.maplibregl-popup:has(.user-popup-card) .maplibregl-popup-close-button {
+  display: none !important;
+}
+
 .user-popup-card {
   font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 1.1rem;
-  padding-right: 32px; /* Ensure space for the close button */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  color: #ffffff;
+  white-space: nowrap;
   margin: 0;
 }
 
