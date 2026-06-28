@@ -2193,7 +2193,6 @@ async function loadCommunityRoutes() {
   try {
     snapshot = await dbClient.collection("community_routes")
       .where("status", "in", ["unverified", "approved"])
-      .orderBy("created_at", "desc")
       .limit(100)
       .get();
   } catch (error) {
@@ -2202,7 +2201,9 @@ async function loadCommunityRoutes() {
     return;
   }
 
-  const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const data = snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .sort((a, b) => (b.created_at?.toMillis?.() || 0) - (a.created_at?.toMillis?.() || 0));
   const reportCounts = getRouteReportCounts(data);
   const confirmationCounts = getRouteConfirmationCounts(data);
   const communityRoutes = data.map((route) => ({
@@ -2240,7 +2241,6 @@ async function loadCommunityPins() {
   try {
     snapshot = await dbClient.collection("pins")
       .where("status", "in", ["unverified", "approved"])
-      .orderBy("created_at", "desc")
       .limit(100)
       .get();
   } catch (error) {
@@ -2250,7 +2250,9 @@ async function loadCommunityPins() {
     return;
   }
 
-  const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const data = snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .sort((a, b) => (b.created_at?.toMillis?.() || 0) - (a.created_at?.toMillis?.() || 0));
   const reportCounts = getReportCounts(data);
   const confirmationCounts = getConfirmationCounts(data);
   const pinsWithReports = data.map((pin) => ({
