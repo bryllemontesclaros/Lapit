@@ -4330,3 +4330,62 @@ summary {
     box-shadow: 3px 3px 0 rgba(21, 21, 21, 0.72);
   }
 }
+
+
+/* --- MOBILE UX OVERHAUL --- */
+@media (max-width: 899px) {
+  .map-actions {
+    left: auto !important;
+    right: 12px !important;
+    bottom: calc(44dvh + 24px + env(safe-area-inset-bottom)) !important;
+    transform: none !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 6px !important;
+    border-radius: 20px !important;
+    width: auto !important;
+    max-width: none !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  .map-action-button {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    justify-content: center !important;
+  }
+  
+  .action-icon {
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+  }
+
+  .action-label {
+    display: none !important;
+  }
+
+  .nearby-summary-pill {
+    max-width: 92vw !important;
+    white-space: normal !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+    padding: 10px 16px !important;
+  }
+  
+  .nearby-summary-pill svg {
+    flex-shrink: 0;
+  }
+
+  .map-legend {
+    left: auto !important;
+    right: 12px !important;
+    top: max(80px, calc(env(safe-area-inset-top) + 70px)) !important;
+    bottom: auto !important;
+  }
+}
+
