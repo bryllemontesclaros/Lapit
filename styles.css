@@ -4575,13 +4575,20 @@ summary {
   text-overflow: ellipsis;
 }
 
-/* Push map-brand down or handle layout on desktop to prevent overlap */
+/* Perfectly center search elements in the available map area on desktop */
 @media (min-width: 900px) {
   .global-search-container {
-    top: 32px;
-    left: calc(24px + 390px + 24px); /* Next to left panel */
-    transform: none;
+    top: 24px;
+    left: calc(434px + (100vw - 434px) / 2);
+    transform: translateX(-50%);
+  }
+
+  .nearby-summary-pill {
+    left: calc(434px + (100vw - 434px) / 2);
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  .nearby-summary-pill:not(.is-hidden) {
+    transform: translateX(-50%) translateY(0);
   }
 }
-
-
