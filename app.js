@@ -192,6 +192,8 @@ const routeColors = {
   "Walk Transfer": markerColors.transfer
 };
 
+const panel = document.querySelector("#panel");
+const panelDragHandle = document.querySelector("#panel-drag-handle");
 const stationList = document.querySelector("#station-list");
 const statusText = document.querySelector("#status");
 const mapLoading = document.querySelector("#map-loading");
@@ -3524,3 +3526,79 @@ renderBuiltInStationMarkers();
 scheduleOsmTransitLoad();
 loadCommunityPins();
 window.addEventListener("load", requestLocation);
+
+// --- Bottom Sheet Drag Logic ---
+let isDraggingPanel = false;
+let startY = 0;
+let currentY = 0;
+let startTransformY = 0;
+
+function getPanelStateHeight(state) {
+  const vh = window.innerHeight;
+  switch(state) {
+    case "expanded": return 0;
+    case "half": return vh * 0.42; // 42vh
+    case "minimized": return vh - 120;
+    default: return vh * 0.42;
+  }
+}
+
+function handleDragStart(e) {
+  isDraggingPanel = true;
+  panel.classList.add("is-dragging");
+  startY = e.type.includes("mouse") ? e.pageY : e.touches[0].pageY;
+  
+  // Parse the current translate Y value
+  const style = window.getComputedStyle(panel);
+  const matrix = new DOMMatrixReadOnly(style.transform);
+  startTransformY = matrix.m42;
+}
+
+function handleDragMove(e) {
+  if (!isDraggingPanel) return;
+  e.preventDefault(); // Prevent scrolling while dragging
+  const y = e.type.includes("mouse") ? e.pageY : e.touches[0].pageY;
+  const deltaY = y - startY;
+  currentY = startTransformY + deltaY;
+  
+  // Bounds checking (don't go above expanded or below minimized)
+  const minTransform = 0; // expanded
+  const maxTransform = window.innerHeight - 120; // minimized
+  
+  const boundedY = Math.max(minTransform, Math.min(currentY, maxTransform));
+  panel.style.transform = `translateY(${boundedY}px)`;
+}
+
+function handleDragEnd() {
+  if (!isDraggingPanel) return;
+  isDraggingPanel = false;
+  panel.classList.remove("is-dragging");
+  panel.style.transform = ""; // Remove inline style to let CSS take over
+  
+  // Determine closest snap point
+  const vh = window.innerHeight;
+  const expandedY = 0;
+  const halfY = vh * 0.58; // 100vh - 42vh
+  const minimizedY = vh - 120;
+  
+  const distances = [
+    { state: "expanded", dist: Math.abs(currentY - expandedY) },
+    { state: "half", dist: Math.abs(currentY - halfY) },
+    { state: "minimized", dist: Math.abs(currentY - minimizedY) }
+  ];
+  
+  distances.sort((a, b) => a.dist - b.dist);
+  const closestState = distances[0].state;
+  
+  panel.setAttribute("data-sheet-state", closestState);
+}
+
+if (panelDragHandle && panel) {
+  panelDragHandle.addEventListener("mousedown", handleDragStart);
+  window.addEventListener("mousemove", handleDragMove, { passive: false });
+  window.addEventListener("mouseup", handleDragEnd);
+  
+  panelDragHandle.addEventListener("touchstart", handleDragStart, { passive: true });
+  window.addEventListener("touchmove", handleDragMove, { passive: false });
+  window.addEventListener("touchend", handleDragEnd);
+}

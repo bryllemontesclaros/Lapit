@@ -1,22 +1,25 @@
 :root {
   color-scheme: light;
   --panel: #ffffff;
-  --ink: #0f172a;
-  --muted: #5f6f86;
-  --line: #e2e8f0;
-  --train: #2563eb;
-  --bus: #dc2626;
-  --user: #0ea5e9;
-  --community: #16a34a;
-  --tricycle: #7c3aed;
-  --uv: #0891b2;
-  --ferry: #0284c7;
-  --other: #475569;
-  --surface: rgba(255, 255, 255, 0.94);
-  --surface-strong: rgba(255, 255, 255, 0.985);
-  --shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
-  --soft-shadow: 0 14px 34px rgba(15, 23, 42, 0.14);
-  --focus: rgba(14, 165, 233, 0.35);
+  --ink: hsl(222, 47%, 11%);
+  --muted: hsl(215, 16%, 47%);
+  --line: hsl(214, 32%, 91%);
+  --train: hsl(225, 85%, 55%);
+  --bus: hsl(350, 85%, 55%);
+  --user: hsl(195, 95%, 50%);
+  --community: hsl(145, 80%, 40%);
+  --tricycle: hsl(265, 85%, 60%);
+  --uv: hsl(190, 95%, 45%);
+  --ferry: hsl(205, 95%, 45%);
+  --other: hsl(215, 14%, 34%);
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-strong: rgba(255, 255, 255, 0.90);
+  --surface-glass: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --shadow: 0 24px 70px rgba(15, 23, 42, 0.18), 0 8px 32px rgba(15, 23, 42, 0.08);
+  --soft-shadow: 0 14px 34px rgba(15, 23, 42, 0.10), 0 4px 16px rgba(15, 23, 42, 0.06);
+  --focus: rgba(14, 165, 233, 0.40);
+  --lapit-ink: hsl(222, 47%, 11%);
 }
 
 * {
@@ -733,18 +736,65 @@ body {
   right: 0;
   bottom: 0;
   z-index: 500;
-  height: 42dvh;
-  min-height: 300px;
+  height: 85dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.74);
   border-bottom: 0;
   border-radius: 22px 22px 0 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.97));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.97));
   box-shadow: 0 -18px 48px rgba(15, 23, 42, 0.18);
   backdrop-filter: blur(14px);
+  transform: translateY(calc(100% - 42dvh));
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.panel.is-dragging {
+  transition: none;
+}
+
+.panel[data-sheet-state="expanded"] {
+  transform: translateY(0);
+}
+
+.panel[data-sheet-state="half"] {
+  transform: translateY(calc(100% - 42dvh));
+}
+
+.panel[data-sheet-state="minimized"] {
+  transform: translateY(calc(100% - 120px));
+}
+
+.panel-drag-handle {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  flex-shrink: 0;
+  touch-action: none;
+}
+
+.panel-drag-handle::after {
+  content: "";
+  width: 44px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--muted);
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
+.panel-drag-handle:active::after,
+.panel.is-dragging .panel-drag-handle::after {
+  opacity: 0.6;
+}
+
+.panel-drag-handle:active {
+  cursor: grabbing;
 }
 
 .panel::before {
@@ -2999,10 +3049,12 @@ body {
 }
 
 .map-actions {
-  border: 3px solid var(--lapit-ink) !important;
-  border-radius: 20px !important;
-  background: rgba(255, 253, 248, 0.9) !important;
-  box-shadow: 6px 6px 0 var(--lapit-ink), var(--lapit-soft-shadow) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 24px !important;
+  background: var(--surface-glass) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  box-shadow: var(--shadow) !important;
   gap: 8px !important;
   padding: 8px !important;
   flex-wrap: wrap !important;
@@ -3011,22 +3063,48 @@ body {
 
 .map-action-button {
   min-height: 48px !important;
-  box-shadow: 3px 3px 0 var(--lapit-ink) !important;
-  border: 2px solid var(--lapit-ink) !important;
-  border-radius: 12px !important;
+  box-shadow: none !important;
+  border: 1px solid transparent !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.map-action-button:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12) !important;
+}
+
+.map-action-button:active {
+  transform: translateY(1px) scale(0.97) !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important;
 }
 
 .my-location-button {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.6) !important;
   color: var(--lapit-ink);
 }
 
 /* Map action button colors are set in the base styles */
 
 .account-menu-button {
-  background: #ffffff;
-  box-shadow: 4px 4px 0 var(--lapit-ink);
-  color: var(--lapit-ink);
+  background: var(--surface-glass);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  border-radius: 16px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.account-menu-button:hover {
+  transform: translateY(-2px);
+  background: var(--surface-strong);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.15);
 }
 
 .account-menu,
