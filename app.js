@@ -140,7 +140,48 @@ const stations = [
   { name: "Dipolog City Integrated Bus Terminal", lat: 8.5871, lng: 123.3419, type: "Bus Terminal" },
   { name: "Cotabato City Mega Market Terminal", lat: 7.2230, lng: 124.2462, type: "Bus Terminal" },
   { name: "Koronadal Yellow Bus Terminal", lat: 6.4976, lng: 124.8466, type: "Bus Terminal" },
-  { name: "Digos City Overland Transport Terminal", lat: 6.7497, lng: 125.3572, type: "Bus Terminal" }
+  { name: "Digos City Overland Transport Terminal", lat: 6.7497, lng: 125.3572, type: "Bus Terminal" },
+
+  // EDSA Carousel
+  { name: "EDSA Carousel - Bagong Barrio", lat: 14.6534, lng: 120.9888, type: "Bus Stop" },
+  { name: "EDSA Carousel - Balintawak", lat: 14.6575, lng: 121.0039, type: "Bus Stop" },
+  { name: "EDSA Carousel - Roosevelt", lat: 14.6573, lng: 121.0210, type: "Bus Stop" },
+  { name: "EDSA Carousel - Quezon Ave", lat: 14.6434, lng: 121.0385, type: "Bus Stop" },
+  { name: "EDSA Carousel - Kamuning", lat: 14.6346, lng: 121.0433, type: "Bus Stop" },
+  { name: "EDSA Carousel - Nepa Q-Mart", lat: 14.6264, lng: 121.0482, type: "Bus Stop" },
+  { name: "EDSA Carousel - Main Avenue", lat: 14.6133, lng: 121.0544, type: "Bus Stop" },
+  { name: "EDSA Carousel - Santolan", lat: 14.6083, lng: 121.0564, type: "Bus Stop" },
+  { name: "EDSA Carousel - Ortigas", lat: 14.5881, lng: 121.0567, type: "Bus Stop" },
+  { name: "EDSA Carousel - Guadalupe", lat: 14.5670, lng: 121.0456, type: "Bus Stop" },
+  { name: "EDSA Carousel - Buendia", lat: 14.5545, lng: 121.0340, type: "Bus Stop" },
+  { name: "EDSA Carousel - Taft Avenue", lat: 14.5381, lng: 121.0011, type: "Bus Stop" },
+  { name: "EDSA Carousel - Roxas Boulevard", lat: 14.5350, lng: 120.9930, type: "Bus Stop" },
+  { name: "EDSA Carousel - Macapagal", lat: 14.5300, lng: 120.9890, type: "Bus Stop" },
+
+  // Airports
+  { name: "NAIA Terminal 1", lat: 14.5086, lng: 121.0006, type: "Terminal" },
+  { name: "NAIA Terminal 2", lat: 14.5097, lng: 121.0035, type: "Terminal" },
+  { name: "NAIA Terminal 4", lat: 14.5241, lng: 120.9961, type: "Terminal" },
+  { name: "Clark Airport Passenger Terminal", lat: 15.1873, lng: 120.5517, type: "Terminal" },
+  { name: "Mactan-Cebu International Airport", lat: 10.3157, lng: 123.9791, type: "Terminal" },
+
+  // P2P & UV Express & Major Jeepney Hubs
+  { name: "Trinoma P2P Terminal", lat: 14.6542, lng: 121.0326, type: "Bus Terminal" },
+  { name: "SM Megamall UV Express Terminal", lat: 14.5846, lng: 121.0569, type: "UV Express Terminal" },
+  { name: "Glorietta 3 P2P Terminal", lat: 14.5528, lng: 121.0253, type: "Bus Terminal" },
+  { name: "Alabang Town Center P2P Terminal", lat: 14.4258, lng: 121.0270, type: "Bus Terminal" },
+  { name: "U.P. Town Center P2P Terminal", lat: 14.6508, lng: 121.0754, type: "Bus Terminal" },
+  { name: "Quiapo Church Jeepney Terminal", lat: 14.5986, lng: 120.9839, type: "Jeepney Terminal" },
+  { name: "Baclaran Jeepney Terminal", lat: 14.5332, lng: 120.9933, type: "Jeepney Terminal" },
+
+  // PNR Stations
+  { name: "PNR Tutuban Station", lat: 14.6120, lng: 120.9723, type: "Train Station" },
+  { name: "PNR Blumentritt Station", lat: 14.6231, lng: 120.9832, type: "Train Station" },
+  { name: "PNR España Station", lat: 14.6136, lng: 120.9969, type: "Train Station" },
+  { name: "PNR Sta. Mesa Station", lat: 14.5996, lng: 121.0084, type: "Train Station" },
+  { name: "PNR EDSA Station", lat: 14.5401, lng: 121.0159, type: "Train Station" },
+  { name: "PNR FTI Station", lat: 14.5034, lng: 121.0436, type: "Train Station" },
+  { name: "PNR Alabang Station", lat: 14.4187, lng: 121.0468, type: "Train Station" }
 ];
 
 const hardcodedRouteConnections = [];
