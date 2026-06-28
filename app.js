@@ -297,6 +297,8 @@ const deletePinButton = document.querySelector("#delete-pin");
 const pinTypeInput = document.querySelector("#pin-type");
 const pinNameInput = document.querySelector("#pin-name");
 const pinRouteInput = document.querySelector("#pin-route");
+const pinHoursInput = document.querySelector("#pin-hours");
+const pinFareInput = document.querySelector("#pin-fare");
 const pinNoteInput = document.querySelector("#pin-note");
 const routeDialog = document.querySelector("#route-dialog");
 const routeForm = document.querySelector("#route-form");
@@ -737,15 +739,21 @@ function getCommunityPinPopupHtml(pin, directionsUrl) {
   const badgeClass = badgeType.toLowerCase().replaceAll(" ", "-");
   const statusLabel = pin.status === "approved" ? "Verified" : "Unverified";
   const confirmationCount = pin.confirmation_count || 0;
+  const isHighlyTrusted = confirmationCount >= 5;
 
   return `
     <article class="spot-popup-card">
-      <h3>${escapeHtml(pin.name)}</h3>
+      <h3>
+        ${escapeHtml(pin.name)}
+        ${isHighlyTrusted ? '<span class="trusted-badge" title="Highly Trusted Community Pin">✔ Verified</span>' : ''}
+      </h3>
       <div class="spot-popup-meta">
         <span class="badge ${badgeClass}">${getNearestBadgeIcon(pin.type)} ${escapeHtml(badgeType)}</span>
         <span>${statusLabel}</span>
       </div>
       ${pin.route_name ? `<p class="spot-popup-note">${escapeHtml(pin.route_name)}</p>` : ""}
+      ${pin.operating_hours ? `<p class="spot-popup-note">🕒 ${escapeHtml(pin.operating_hours)}</p>` : ""}
+      ${pin.fare_info ? `<p class="spot-popup-note">💵 ${escapeHtml(pin.fare_info)}</p>` : ""}
       ${pin.note ? `<p class="spot-popup-note">${escapeHtml(pin.note)}</p>` : ""}
       <p class="spot-popup-note">${confirmationCount} confirmation${confirmationCount === 1 ? "" : "s"}</p>
       <div class="spot-popup-actions">
@@ -2174,11 +2182,17 @@ function renderCommunityPins(pins) {
     const canManagePin = isOwner || isAdminUser();
     const directionsUrl = getCommunityPinDirectionsUrl(pin);
     const connectedRouteCount = getConnectedRoutesForPin(pin.id).length;
+    const isHighlyTrusted = confirmCount >= 5;
 
     item.innerHTML = `
       <button class="community-main" type="button" aria-label="${actionLabel}: ${pin.name}">
-        <p class="community-name">${pin.name}</p>
+        <p class="community-name">
+          ${pin.name} 
+          ${isHighlyTrusted ? '<span class="trusted-badge" title="Highly Trusted Community Pin">✔ Verified</span>' : ''}
+        </p>
         <p class="community-meta">${pin.type}${pin.route_name ? ` · ${pin.route_name}` : ""}</p>
+        ${pin.operating_hours ? `<p class="community-meta community-rich-data">🕒 ${pin.operating_hours}</p>` : ''}
+        ${pin.fare_info ? `<p class="community-meta community-rich-data">💵 ${pin.fare_info}</p>` : ''}
       </button>
       <div class="community-actions">
         <span class="pin-status ${pin.status}">${statusLabel}</span>
@@ -2345,7 +2359,7 @@ async function loadCommunityPins() {
     report_count: reportCounts.get(pin.id) || 0,
     confirmation_count: confirmationCounts.get(pin.id) || 0,
     created_by: pin.created_by || null
-  }));
+  })).filter(pin => pin.report_count < 3); // Auto-moderation: hide if 3+ reports
 
   communityMarkers.forEach((marker) => {
     spotPopupMarkers.delete(marker);
@@ -2658,6 +2672,8 @@ function openEditPinDialog(pinId) {
   pinTypeInput.value = pin.type;
   pinNameInput.value = pin.name;
   pinRouteInput.value = pin.route_name || "";
+  pinHoursInput.value = pin.operating_hours || "";
+  pinFareInput.value = pin.fare_info || "";
   pinNoteInput.value = pin.note || "";
   pinDialog.showModal();
 }
@@ -2688,6 +2704,8 @@ async function saveCommunityPin() {
     type: pinTypeInput.value,
     name: pinNameInput.value.trim(),
     route_name: pinRouteInput.value.trim() || null,
+    operating_hours: pinHoursInput.value.trim() || null,
+    fare_info: pinFareInput.value.trim() || null,
     note: pinNoteInput.value.trim() || null,
     lat: pendingPinLatLng.lat,
     lng: pendingPinLatLng.lng
