@@ -365,6 +365,40 @@ body {
   z-index: 890;
 }
 
+.nearby-summary-pill {
+  position: absolute;
+  top: max(70px, calc(env(safe-area-inset-top) + 60px));
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  z-index: 800;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.nearby-summary-pill:not(.is-hidden) {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nearby-summary-pill span {
+  font-weight: 800;
+}
+
 .route-mode-banner {
   top: max(14px, env(safe-area-inset-top));
   justify-content: space-between;

@@ -238,6 +238,7 @@ const panelDragHandle = document.querySelector("#panel-drag-handle");
 const stationList = document.querySelector("#station-list");
 const statusText = document.querySelector("#status");
 const mapLoading = document.querySelector("#map-loading");
+const nearbySummaryPill = document.querySelector("#nearby-summary-pill");
 const addPinButton = document.querySelector("#add-pin-button");
 const addRouteButton = document.querySelector("#add-route-button");
 const myLocationButton = document.querySelector("#my-location-button");
@@ -3111,6 +3112,45 @@ function updateNearestTransitList(options = {}) {
   statusText.textContent = totalCount > limit
     ? `Showing nearest ${limit} of ${totalCount} transit spots.`
     : `Showing all ${totalCount} transit spots, sorted by distance.`;
+
+  if (nearbySummaryPill) {
+    const nearbyRadiusMeters = 2000; // 2km
+    const nearbyItems = sortedTransit.filter(item => item.distanceMeters <= nearbyRadiusMeters);
+    
+    if (nearbyItems.length > 0) {
+      const counts = {};
+      nearbyItems.forEach(item => {
+        let typeLabel = item.type;
+        if (trainPinTypes.has(item.type)) typeLabel = "Train";
+        else if (busPinTypes.has(item.type)) typeLabel = "Bus";
+        else if (jeepneyPinTypes.has(item.type)) typeLabel = "Jeepney";
+        else if (uvVanPinTypes.has(item.type)) typeLabel = "UV Express";
+        
+        counts[typeLabel] = (counts[typeLabel] || 0) + 1;
+      });
+
+      const countStrings = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1]) // Highest count first
+        .slice(0, 3) // Top 3 categories
+        .map(([type, count]) => `<span>${count}</span> ${type}${count > 1 && type !== 'UV Express' && !type.endsWith('s') ? 's' : ''}`);
+      
+      let summaryText = countStrings.join(', ');
+      if (Object.keys(counts).length > 3) {
+        summaryText += ', etc.';
+      }
+
+      nearbySummaryPill.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        ${summaryText} Near You
+      `;
+      nearbySummaryPill.classList.remove("is-hidden");
+    } else {
+      nearbySummaryPill.classList.add("is-hidden");
+    }
+  }
     
   renderNearestStations(displayedTransit);
 }
