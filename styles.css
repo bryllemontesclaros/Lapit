@@ -4575,7 +4575,7 @@ summary {
   text-overflow: ellipsis;
 }
 
-/* Perfectly center search elements in the available map area on desktop */
+/* Perfectly center search elements and map actions in the available map area on desktop */
 @media (min-width: 900px) {
   .global-search-container {
     top: 24px;
@@ -4590,5 +4590,10 @@ summary {
 
   .nearby-summary-pill:not(.is-hidden) {
     transform: translateX(-50%) translateY(0);
+  }
+
+  .map-actions {
+    left: calc(434px + (100vw - 434px) / 2);
+    transform: translateX(-50%);
   }
 }
