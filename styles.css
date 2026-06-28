@@ -2992,21 +2992,21 @@ body {
 }
 
 .map-actions {
-  border: 3px solid var(--lapit-ink);
-  border-radius: 20px;
-  background: rgba(255, 253, 248, 0.9);
-  box-shadow: 6px 6px 0 var(--lapit-ink), var(--lapit-soft-shadow);
-  gap: 8px;
-  padding: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+  border: 3px solid var(--lapit-ink) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 253, 248, 0.9) !important;
+  box-shadow: 6px 6px 0 var(--lapit-ink), var(--lapit-soft-shadow) !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
 }
 
 .map-action-button {
-  min-height: 48px;
-  box-shadow: 3px 3px 0 var(--lapit-ink);
-  border: 2px solid var(--lapit-ink);
-  border-radius: 12px;
+  min-height: 48px !important;
+  box-shadow: 3px 3px 0 var(--lapit-ink) !important;
+  border: 2px solid var(--lapit-ink) !important;
+  border-radius: 12px !important;
 }
 
 .my-location-button {
