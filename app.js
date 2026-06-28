@@ -3104,8 +3104,15 @@ function updateNearestTransitList(options = {}) {
     refreshMapLayout();
   }
 
-  statusText.textContent = `Showing all ${sortedTransit.length} transit spots, sorted by distance.`;
-  renderNearestStations(sortedTransit);
+  const limit = 15;
+  const displayedTransit = sortedTransit.slice(0, limit);
+  const totalCount = sortedTransit.length;
+
+  statusText.textContent = totalCount > limit
+    ? `Showing nearest ${limit} of ${totalCount} transit spots.`
+    : `Showing all ${totalCount} transit spots, sorted by distance.`;
+    
+  renderNearestStations(displayedTransit);
 }
 
 function showNearestStations(position) {
