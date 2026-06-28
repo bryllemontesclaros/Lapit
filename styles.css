@@ -1501,8 +1501,8 @@ h2 {
 }
 
 .maplibregl-popup-close-button {
-  top: 8px;
-  right: 8px;
+  top: 10px !important;
+  right: 10px !important;
   width: 28px;
   height: 28px;
   border-radius: 999px;
@@ -1518,7 +1518,7 @@ h2 {
 
 .spot-popup-card {
   width: min(280px, calc(100vw - 56px));
-  padding: 16px;
+  padding: 18px 18px 16px;
 }
 
 .spot-popup-card h3 {
@@ -1558,7 +1558,14 @@ h2 {
 
 .popup-directions-link {
   flex: 1 1 100%;
-  min-height: 36px;
+  min-height: 44px !important;
+  background: white !important;
+  color: var(--lapit-ink) !important;
+  border: 2px solid var(--lapit-ink) !important;
+  box-shadow: 3px 3px 0 var(--lapit-ink) !important;
+  border-radius: 12px !important;
+  font-family: ui-rounded, "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif !important;
+  font-size: 0.9rem !important;
 }
 
 .spot-popup-actions button {
@@ -3227,11 +3234,16 @@ summary {
 
 /* Apply the thick brand borders to the actual popup container */
 .maplibregl-popup-content {
-  border: 3px solid var(--lapit-ink);
-  border-radius: 18px;
-  box-shadow: 6px 6px 0 var(--lapit-ink), 0 24px 80px rgba(15, 23, 42, 0.28);
-  padding: 0;
-  overflow: hidden;
+  border: 3px solid var(--lapit-ink) !important;
+  border-radius: 20px !important;
+  box-shadow: 6px 6px 0 var(--lapit-ink), 0 24px 80px rgba(15, 23, 42, 0.28) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Hide the triangle tip since it cannot easily have a stroke */
+.maplibregl-popup-tip {
+  display: none !important;
 }
 
 /* Leaflet popup — used for the user location "You are here" marker */

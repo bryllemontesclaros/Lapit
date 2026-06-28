@@ -3143,8 +3143,7 @@ addPinButton.addEventListener("click", async () => {
   addPinMode = !addPinMode;
   addPinButton.setAttribute("aria-pressed", String(addPinMode));
   const addPinLabel = addPinButton.querySelector(".action-label");
-  if (addPinLabel) addPinLabel.textContent = addPinMode ? "Tap map" : "Add Pin";
-  else addPinButton.textContent = addPinMode ? "Tap map" : "Add Pin";
+  if (addPinLabel) { addPinLabel.textContent = addPinMode ? "Tap map" : "Add Pin"; }
   communityStatus.textContent = addPinMode ? "Tap the map where the transit spot should go." : "Community spots are visible to everyone.";
 
   if (!addPinMode) {
@@ -3166,7 +3165,8 @@ addRouteButton.addEventListener("click", () => {
   addPinMode = false;
   removePendingPinMarker();
   addPinButton.setAttribute("aria-pressed", "false");
-  addPinButton.textContent = "Add pin";
+  const fallbackLabel = addPinButton.querySelector(".action-label");
+  if (fallbackLabel) { fallbackLabel.textContent = "Add Pin"; }
   createRouteMode = !createRouteMode;
   pendingRouteStartId = null;
   pendingRouteEndId = null;
