@@ -568,10 +568,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: clamp(18px, 4vw, 56px);
-  background:
-    linear-gradient(90deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.45) 52%, rgba(15, 23, 42, 0.24)),
-    rgba(15, 23, 42, 0.22);
-  backdrop-filter: blur(6px) saturate(1.05);
+  background: rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(6px) saturate(1.1);
   overflow-y: auto;
 }
 
@@ -590,6 +588,13 @@ body {
 .landing-copy {
   max-width: 620px;
   color: #ffffff;
+  padding: clamp(24px, 4vw, 48px);
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
 }
 
 .onboarding-card {
@@ -635,6 +640,7 @@ body {
   line-height: 0.98;
   letter-spacing: 0;
   text-wrap: balance;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .onboarding-copy {
@@ -644,6 +650,7 @@ body {
   font-size: 1.12rem;
   font-weight: 650;
   line-height: 1.45;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .landing-stats {

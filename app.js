@@ -404,6 +404,26 @@ const tileLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/servi
 activeRouteLayers.addTo(map);
 updateMapLabelVisibility();
 
+let landingAnimationInterval = null;
+
+function startLandingAnimation() {
+  if (landingAnimationInterval) return;
+  landingAnimationInterval = window.setInterval(() => {
+    if (!shouldShowOnboarding()) {
+      stopLandingAnimation();
+      return;
+    }
+    map.panBy([1, 0], { animate: false });
+  }, 50);
+}
+
+function stopLandingAnimation() {
+  if (landingAnimationInterval) {
+    window.clearInterval(landingAnimationInterval);
+    landingAnimationInterval = null;
+  }
+}
+
 function refreshMapLayout() {
   window.requestAnimationFrame(() => {
     map.invalidateSize({
@@ -415,11 +435,17 @@ function refreshMapLayout() {
 tileLayer.once("load", () => {
   mapLoading.classList.add("is-hidden");
   refreshMapLayout();
+  if (shouldShowOnboarding()) {
+    startLandingAnimation();
+  }
 });
 
 window.setTimeout(() => {
   mapLoading.classList.add("is-hidden");
   refreshMapLayout();
+  if (shouldShowOnboarding()) {
+    startLandingAnimation();
+  }
 }, 1500);
 
 window.addEventListener("resize", () => {
@@ -2431,6 +2457,7 @@ function clearGuestChoice() {
 }
 
 function hideOnboardingOverlay() {
+  stopLandingAnimation();
   onboardingOverlay.classList.add("is-hidden");
   onboardingOverlay.setAttribute("aria-hidden", "true");
   refreshMapLayout();
@@ -2444,6 +2471,7 @@ function showOnboardingOverlay() {
   onboardingOverlay.classList.remove("is-hidden");
   onboardingOverlay.removeAttribute("aria-hidden");
   refreshMapLayout();
+  startLandingAnimation();
 }
 
 function shouldShowOnboarding() {
