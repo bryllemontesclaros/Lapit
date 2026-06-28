@@ -86,19 +86,37 @@
         </div>
       </section>
 
+
       <div class="map-actions" aria-label="Map actions">
         <button id="my-location-button" class="map-action-button my-location-button" type="button">
-          My location
+          <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            <circle cx="12" cy="12" r="8" opacity="0.25"/>
+          </svg>
+          <span class="action-label">Location</span>
         </button>
 
         <button id="add-pin-button" class="map-action-button add-pin-button" type="button" aria-pressed="false">
-          Add pin
+          <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+            <line x1="12" y1="5" x2="12" y2="8"/><line x1="12" y1="5" x2="12" y2="5"/>
+            <line x1="17" y1="3" x2="17" y2="6"/>
+          </svg>
+          <span class="action-label">Add Pin</span>
         </button>
 
         <button id="add-route-button" class="map-action-button add-route-button" type="button" aria-pressed="false">
-          Create route
+          <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/>
+            <path d="M6 17V7a2 2 0 0 1 2-2h8"/>
+            <polyline points="15 3 18 5 15 7"/>
+          </svg>
+          <span class="action-label">Route</span>
         </button>
       </div>
+
 
       <div id="route-mode-banner" class="route-mode-banner is-hidden" role="status">
         <div class="route-mode-copy">

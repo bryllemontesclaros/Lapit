@@ -163,48 +163,82 @@ body {
 
 .map-actions {
   position: absolute;
-  right: 14px;
-  bottom: calc(42dvh + 14px);
+  bottom: calc(42dvh + 16px);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 850;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 8px;
-  max-width: min(360px, calc(100vw - 28px));
+  align-items: stretch;
+  gap: 0;
+  padding: 6px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.18), 0 1px 3px rgba(15, 23, 42, 0.08);
+  white-space: nowrap;
 }
 
 .map-action-button {
-  min-height: 44px;
-  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 72px;
+  min-height: 60px;
+  padding: 8px 14px;
   border: 0;
-  border-radius: 8px;
-  background: #0f172a;
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.28);
-  color: #ffffff;
+  border-radius: 14px;
+  background: transparent;
+  color: #1e293b;
   font: inherit;
-  font-size: 0.9rem;
-  font-weight: 900;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  transition: background 140ms ease, transform 120ms ease, color 140ms ease;
 }
 
-.map-action-button:hover,
-.account-menu-button:hover,
-.primary-button:hover,
-.secondary-button:hover {
+.action-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  stroke: currentColor;
+  transition: transform 120ms ease;
+}
+
+.action-label {
+  line-height: 1;
+}
+
+.map-action-button:hover {
+  background: rgba(15, 23, 42, 0.06);
   transform: translateY(-1px);
 }
 
+.map-action-button:active {
+  transform: translateY(0);
+  background: rgba(15, 23, 42, 0.10);
+}
+
+.map-action-button[aria-pressed="true"] {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+}
+
 .my-location-button {
-  background: var(--surface-strong);
+  color: #334155;
+}
+
+.add-pin-button {
   color: #0f172a;
 }
 
 .add-route-button {
-  background: #dc2626;
-  box-shadow: 0 14px 32px rgba(220, 38, 38, 0.26);
+  color: #1d4ed8;
 }
 
 .map-account {
@@ -2205,46 +2239,17 @@ h2 {
 
 .map-actions {
   padding: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.76);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.2);
-  backdrop-filter: blur(18px);
-}
-
-.map-action-button,
-.account-menu-button,
-.primary-button,
-.secondary-button,
-.danger-button,
-.directions-link,
-.filter-button,
-.report-pin-button,
-.confirm-pin-button,
-.edit-pin-button,
-.delete-pin-button,
-.report-route-button,
-.confirm-route-button,
-.edit-route-button,
-.delete-route-button {
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(22px) saturate(1.8);
+  -webkit-backdrop-filter: blur(22px) saturate(1.8);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
 }
 
 .map-action-button {
-  min-height: 46px;
-  box-shadow: none;
-}
-
-.my-location-button {
-  border: 1px solid rgba(226, 232, 240, 0.9);
-}
-
-.add-pin-button {
-  background: #111827;
-}
-
-.add-route-button {
-  background: #dc2626;
+  min-height: 56px;
+  border-radius: 12px;
   box-shadow: none;
 }
 
@@ -2413,9 +2418,11 @@ h2 {
   }
 
   .map-actions {
-    top: 24px;
-    right: 132px;
-    gap: 6px;
+    /* On desktop, keep bottom-center above panel left edge */
+    bottom: 32px;
+    left: calc(24px + min(390px, calc(100vw - 48px)) / 2 + min(390px, calc(100vw - 48px)) / 2 + 24px);
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .map-account {
@@ -2474,18 +2481,24 @@ h2 {
   }
 
   .map-actions {
-    left: 12px;
-    right: 12px;
-    bottom: calc(44dvh + 10px);
-    grid-template-columns: 0.95fr 0.95fr 1.1fr;
+    left: 50%;
+    right: auto;
+    bottom: calc(44dvh + 12px);
+    transform: translateX(-50%);
     padding: 5px;
     border-radius: 16px;
-    gap: 5px;
   }
 
   .map-action-button {
-    min-height: 42px;
-    font-size: 0.76rem;
+    min-width: 64px;
+    min-height: 54px;
+    font-size: 0.68rem;
+    padding: 7px 10px;
+  }
+
+  .action-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .panel {
@@ -2571,15 +2584,10 @@ h2 {
 }
 
 @media (max-width: 380px) {
-  .map-actions {
-    left: 10px;
-    right: 10px;
-    width: auto;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .add-route-button {
-    grid-column: 1 / -1;
+  /* small screen: slightly shrink buttons */
+  .map-action-button {
+    min-width: 58px;
+    padding: 7px 8px;
   }
 }
 
@@ -2933,15 +2941,7 @@ body {
   color: var(--lapit-ink);
 }
 
-.add-pin-button {
-  background: var(--lapit-ink);
-  color: #ffffff;
-}
-
-.add-route-button {
-  background: var(--lapit-red);
-  color: #ffffff;
-}
+/* Map action button colors are set in the base styles */
 
 .account-menu-button {
   background: #ffffff;
@@ -3081,16 +3081,12 @@ body {
   }
 
   .map-actions {
-    border-width: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
+    /* Let the base glassmorphism style show — no lapit brand override needed here */
   }
 
   .map-action-button {
-    border-width: 3px;
-    box-shadow: 4px 4px 0 var(--lapit-ink);
+    border-width: 0;
+    box-shadow: none;
   }
 
   .panel {
@@ -3259,27 +3255,23 @@ summary {
   }
 
   .map-actions {
-    right: 10px;
-    bottom: calc(42dvh + 10px + env(safe-area-inset-bottom));
-    left: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
+    right: auto;
+    left: 50%;
+    bottom: calc(42dvh + 12px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
     max-width: none;
   }
 
   .map-action-button {
-    min-height: 44px;
-    padding: 0 8px;
-    border-width: 2px;
-    border-radius: 16px;
-    box-shadow: 3px 3px 0 var(--lapit-ink);
-    font-size: clamp(0.78rem, 3.7vw, 0.9rem);
+    min-height: 56px;
+    padding: 8px 12px;
+    border-width: 0;
+    border-radius: 12px;
+    box-shadow: none;
+    font-size: 0.72rem;
     white-space: nowrap;
-  }
-
-  .map-action-button:hover {
-    box-shadow: 3px 3px 0 var(--lapit-ink);
   }
 
   .panel {
@@ -3430,15 +3422,10 @@ summary {
     max-width: 96px;
   }
 
-  .map-actions {
-    gap: 7px;
-  }
-
   .map-action-button {
-    min-height: 42px;
-    padding: 0 7px;
-    border-radius: 14px;
-    font-size: clamp(0.72rem, 3.4vw, 0.82rem);
+    min-height: 54px;
+    padding: 7px 9px;
+    border-radius: 12px;
   }
 
   .panel {
@@ -3461,16 +3448,10 @@ summary {
 }
 
 @media (max-width: 360px) {
-  .map-actions {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .add-route-button {
-    grid-column: 1 / -1;
-  }
-
+  /* small screens: keep dock centered, just a touch smaller */
   .map-action-button {
-    min-height: 40px;
+    min-width: 56px;
+    padding: 6px 8px;
   }
 }
 
@@ -3681,33 +3662,7 @@ summary {
     text-decoration: none;
   }
 
-  .map-actions {
-    right: 12px;
-    bottom: calc(42dvh + 10px + env(safe-area-inset-bottom));
-    left: 12px;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-
-  .map-action-button {
-    min-width: 0;
-    min-height: 42px;
-    padding: 0 9px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.82rem;
-  }
-
-  .add-route-button {
-    width: 54px;
-    padding: 0;
-    font-size: 0;
-  }
-
-  .add-route-button::after {
-    content: "Route";
-    font-size: 0.72rem;
-  }
+  /* Phase 5 mobile: dock stays centered, no layout overrides needed */
 
   .map-legend {
     bottom: calc(42dvh + 62px + env(safe-area-inset-bottom));
