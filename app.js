@@ -221,6 +221,7 @@ const authPasswordInput = document.querySelector("#auth-password");
 const authMessage = document.querySelector("#auth-message");
 const authCancelButton = document.querySelector("#auth-cancel");
 const authSignUpButton = document.querySelector("#auth-sign-up");
+const authForgotButton = document.querySelector("#auth-forgot-password");
 const legalDialog = document.querySelector("#legal-dialog");
 const legalDialogTitle = document.querySelector("#legal-dialog-title");
 const legalCloseButton = document.querySelector("#legal-close");
@@ -3313,6 +3314,31 @@ authSignUpButton.addEventListener("click", async () => {
   }
 
   await signUpWithEmailPassword(authEmailInput.value.trim(), authPasswordInput.value);
+});
+
+authForgotButton.addEventListener("click", async () => {
+  const email = authEmailInput.value.trim();
+  if (!email) {
+    authMessage.textContent = "Enter your email address above, then tap Forgot password.";
+    authEmailInput.focus();
+    return;
+  }
+
+  if (!firebaseAuth) {
+    authMessage.textContent = "Firebase is not connected.";
+    return;
+  }
+
+  try {
+    await firebaseAuth.sendPasswordResetEmail(email);
+    authMessage.textContent = `Reset link sent to ${email}. Check your inbox (and spam folder).`;
+  } catch (error) {
+    if (error.code === "auth/user-not-found") {
+      authMessage.textContent = "No account found with that email. Try creating one.";
+    } else {
+      authMessage.textContent = `Could not send reset email: ${error.message}`;
+    }
+  }
 });
 
 map.on("click", (event) => {
