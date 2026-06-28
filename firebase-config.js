@@ -1,8 +1,8 @@
 window.LAPIT_FIREBASE = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyD5Mak9xEzxCpNF-XqyDnucYdkuTW3dPxM",
+  authDomain: "lapit-5069d.firebaseapp.com",
+  projectId: "lapit-5069d",
+  storageBucket: "lapit-5069d.firebasestorage.app",
+  messagingSenderId: "909427198365",
+  appId: "1:909427198365:web:af488688f7ebae5ee10774"
 };
