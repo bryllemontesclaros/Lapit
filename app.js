@@ -3368,7 +3368,8 @@ map.on("click", (event) => {
 
   addPinMode = false;
   addPinButton.setAttribute("aria-pressed", "false");
-  addPinButton.textContent = "Add pin";
+  const fallbackLabel1 = addPinButton.querySelector(".action-label");
+  if (fallbackLabel1) { fallbackLabel1.textContent = "Add Pin"; }
   showPinLocationConfirmation(event.latlng);
 });
 
@@ -3378,7 +3379,8 @@ rejectPinLocationButton.addEventListener("click", () => {
   pendingPinLatLng = null;
   addPinMode = true;
   addPinButton.setAttribute("aria-pressed", "true");
-  addPinButton.textContent = "Tap map";
+  const fallbackLabel2 = addPinButton.querySelector(".action-label");
+  if (fallbackLabel2) { fallbackLabel2.textContent = "Tap map"; }
   communityStatus.textContent = "Tap the map again to choose a better pin location.";
 });
 
