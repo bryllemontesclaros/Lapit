@@ -205,9 +205,11 @@ const routeModeStep = document.querySelector("#route-mode-step");
 const routeModeTitle = document.querySelector("#route-mode-title");
 const routeModeText = document.querySelector("#route-mode-text");
 const cancelRouteModeButton = document.querySelector("#cancel-route-mode");
-const routeInfoCard = document.querySelector("#route-info-card");
-const routeInfoTitle = document.querySelector("#route-info-title");
-const routeInfoMeta = document.querySelector("#route-info-meta");
+const routeDrawer = document.querySelector("#route-drawer");
+const routeDrawerTitle = document.querySelector("#route-drawer-title");
+const routeDrawerMeta = document.querySelector("#route-drawer-meta");
+const routeTimeline = document.querySelector("#route-timeline");
+const closeRouteDrawerBtn = document.querySelector("#close-route-drawer");
 const onboardingOverlay = document.querySelector("#onboarding-overlay");
 const onboardingSignInButton = document.querySelector("#onboarding-sign-in");
 const onboardingGuestButton = document.querySelector("#onboarding-guest");
@@ -1337,7 +1339,8 @@ function clearActiveRouteLines() {
   map.getContainer().classList.remove("is-viewing-route");
   map.getContainer().classList.remove("is-popup-open");
   selectedConnectedRoutePinId = null;
-  routeInfoCard.classList.add("is-hidden");
+  routeDrawer.classList.remove("is-active");
+  routeDrawer.setAttribute("aria-hidden", "true");
 }
 
 function fitMapToRoutePoints(points) {
@@ -1443,20 +1446,54 @@ function addRouteEndpointMarker(pin, label, color) {
   activeRouteLayers.addLayer(endpointLabel);
 }
 
-function updateRouteInfoCard(connectedRoutes) {
+function updateRouteDrawer(connectedRoutes) {
   if (!connectedRoutes.length) {
-    routeInfoCard.classList.add("is-hidden");
+    routeDrawer.classList.remove("is-active");
+    routeDrawer.setAttribute("aria-hidden", "true");
     return;
   }
 
   const firstRoute = connectedRoutes[0];
-  routeInfoTitle.textContent = connectedRoutes.length === 1
+  routeDrawerTitle.textContent = connectedRoutes.length === 1
     ? firstRoute.name
     : `${connectedRoutes.length} connected routes`;
-  routeInfoMeta.textContent = connectedRoutes.length === 1
+  routeDrawerMeta.textContent = connectedRoutes.length === 1
     ? `${firstRoute.startPin.name} to ${firstRoute.endPin.name}`
     : "Tap another routed spot to inspect its connections.";
-  routeInfoCard.classList.remove("is-hidden");
+    
+  // Build timeline if single route is selected
+  routeTimeline.innerHTML = "";
+  if (connectedRoutes.length === 1) {
+    const stops = [
+      { name: firstRoute.startPin.name, desc: "Start location", type: "is-start" },
+      // Optional: Add intermediate stops if they existed on the data model
+      { name: firstRoute.endPin.name, desc: "Destination", type: "is-end" }
+    ];
+    
+    stops.forEach((stop) => {
+      const li = document.createElement("li");
+      li.className = `timeline-stop ${stop.type}`;
+      li.innerHTML = `
+        <div class="timeline-stop-name">${stop.name}</div>
+        <div class="timeline-stop-desc">${stop.desc}</div>
+      `;
+      routeTimeline.appendChild(li);
+    });
+  } else {
+    // If multiple routes are shown, just show a list of them
+    connectedRoutes.forEach((route) => {
+      const li = document.createElement("li");
+      li.className = "timeline-stop";
+      li.innerHTML = `
+        <div class="timeline-stop-name">${route.name}</div>
+        <div class="timeline-stop-desc">${route.startPin.name} to ${route.endPin.name}</div>
+      `;
+      routeTimeline.appendChild(li);
+    });
+  }
+
+  routeDrawer.classList.add("is-active");
+  routeDrawer.setAttribute("aria-hidden", "false");
 }
 
 function getRouteById(routeId) {
@@ -1588,10 +1625,10 @@ function showConnectedRoutesForPin(pinId) {
     setActiveRouteVisualPaths(routeVisualPaths);
     map.getContainer().classList.add("is-viewing-route");
     fitMapToRoutePoints(routeBoundsPoints);
-    updateRouteInfoCard(connectedRoutes);
+    updateRouteDrawer(connectedRoutes);
     communityStatus.textContent = `${connectedRoutes.length} connected route${connectedRoutes.length === 1 ? "" : "s"} highlighted.`;
   } else {
-    updateRouteInfoCard([]);
+    updateRouteDrawer([]);
     communityStatus.textContent = "No connected routes for this spot yet.";
   }
 }
@@ -3601,4 +3638,10 @@ if (panelDragHandle && panel) {
   panelDragHandle.addEventListener("touchstart", handleDragStart, { passive: true });
   window.addEventListener("touchmove", handleDragMove, { passive: false });
   window.addEventListener("touchend", handleDragEnd);
+}
+
+if (closeRouteDrawerBtn) {
+  closeRouteDrawerBtn.addEventListener("click", () => {
+    clearActiveRouteLines();
+  });
 }

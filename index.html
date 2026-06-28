@@ -200,6 +200,7 @@
           </nav>
         </div>
       </div>
+      </div>
     </section>
 
     <noscript>
@@ -220,11 +221,7 @@
           </div>
         </header>
 
-        <div id="route-info-card" class="route-info-card is-hidden" role="status" aria-live="polite">
-          <span class="route-info-kicker">Connected route</span>
-          <strong id="route-info-title">Route selected</strong>
-          <span id="route-info-meta">Start to destination</span>
-        </div>
+
 
         <ul id="station-list" class="station-list" aria-live="polite">
           <li class="message">
@@ -260,6 +257,25 @@
         </section>
       </div>
 
+      <div id="route-drawer" class="route-drawer" aria-hidden="true">
+        <header class="route-drawer-header">
+          <button id="close-route-drawer" class="close-drawer-button" aria-label="Close route details">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div>
+            <h3 id="route-drawer-title">Route Details</h3>
+            <p id="route-drawer-meta">Select a route</p>
+          </div>
+        </header>
+        <div class="route-timeline-container">
+          <ul id="route-timeline" class="route-timeline">
+            <!-- timeline items injected here -->
+          </ul>
+        </div>
+      </div>
     </section>
 
     <dialog id="confirm-pin-dialog" class="pin-dialog" aria-labelledby="confirm-pin-title">
@@ -475,6 +491,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/supercluster@8.0.1/dist/supercluster.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
