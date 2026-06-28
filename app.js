@@ -2327,6 +2327,10 @@ function hideOnboardingOverlay() {
   onboardingOverlay.classList.add("is-hidden");
   onboardingOverlay.setAttribute("aria-hidden", "true");
   refreshMapLayout();
+  // Trigger location now that the user is on the map
+  if (!userLatLng) {
+    requestLocation();
+  }
 }
 
 function showOnboardingOverlay() {
@@ -3091,7 +3095,9 @@ addPinButton.addEventListener("click", () => {
   resetRouteMode();
   addPinMode = !addPinMode;
   addPinButton.setAttribute("aria-pressed", String(addPinMode));
-  addPinButton.textContent = addPinMode ? "Tap map" : "Add pin";
+  const addPinLabel = addPinButton.querySelector(".action-label");
+  if (addPinLabel) addPinLabel.textContent = addPinMode ? "Tap map" : "Add Pin";
+  else addPinButton.textContent = addPinMode ? "Tap map" : "Add Pin";
   communityStatus.textContent = addPinMode ? "Tap the map where the transit spot should go." : "Community spots are visible to everyone.";
 
   if (!addPinMode) {
@@ -3118,7 +3124,9 @@ addRouteButton.addEventListener("click", () => {
   pendingRouteStartId = null;
   pendingRouteEndId = null;
   addRouteButton.setAttribute("aria-pressed", String(createRouteMode));
-  addRouteButton.textContent = createRouteMode ? "Pick start" : "Create route";
+  const addRouteLabel = addRouteButton.querySelector(".action-label");
+  if (addRouteLabel) addRouteLabel.textContent = createRouteMode ? "Pick start" : "Route";
+  else addRouteButton.textContent = createRouteMode ? "Pick start" : "Route";
 
   if (createRouteMode) {
     clearSelectedRouteStartPin();
