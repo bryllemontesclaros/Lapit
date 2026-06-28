@@ -1914,12 +1914,14 @@ h2 {
   }
 
   .map-actions {
-    top: 24px;
-    right: 112px;
-    bottom: auto;
+    top: auto;
+    right: auto;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
     flex-direction: row;
-    align-items: flex-start;
-    max-width: calc(100vw - 540px);
+    align-items: center;
+    max-width: none;
   }
 
   .map-account {
@@ -2015,13 +2017,14 @@ h2 {
   }
 
   .map-actions {
-    right: 10px;
-    left: 10px;
-    bottom: calc(52dvh + 8px);
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.15fr;
+    right: auto;
+    left: 50%;
+    bottom: calc(52dvh + 12px);
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
     max-width: none;
-    gap: 7px;
+    gap: 0;
   }
 
   .map-action-button {
@@ -2159,11 +2162,7 @@ h2 {
 }
 
 @media (max-width: 380px) {
-  .map-actions {
-    grid-template-columns: 1fr;
-    left: auto;
-    width: min(160px, calc(100vw - 24px));
-  }
+  /* Very small screens: just shrink button padding */.map-action-button { min-width: 58px; padding: 6px 8px; }
 
   .map-action-button {
     padding: 0 11px;
