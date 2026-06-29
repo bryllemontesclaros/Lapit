@@ -763,7 +763,12 @@ function getTransitPopupHtml(item, sourceText, directionsUrl) {
         <span class="badge ${badgeClass}">${getNearestBadgeIcon(item.type)} ${escapeHtml(badgeType)}</span>
         ${sourceLabel}
       </div>
-      <a class="directions-link popup-directions-link" href="${directionsUrl}" target="_blank" rel="noopener">Directions</a>
+      <div class="spot-popup-actions">
+        <a class="directions-link popup-directions-link" href="${directionsUrl}" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          Directions
+        </a>
+      </div>
     </article>
   `;
 }
@@ -791,7 +796,10 @@ function getCommunityPinPopupHtml(pin, directionsUrl) {
       ${pin.note ? `<p class="spot-popup-note">${escapeHtml(pin.note)}</p>` : ""}
       <p class="spot-popup-note">${confirmationCount} confirmation${confirmationCount === 1 ? "" : "s"}</p>
       <div class="spot-popup-actions">
-        <a class="directions-link popup-directions-link" href="${directionsUrl}" target="_blank" rel="noopener">Directions</a>
+        <a class="directions-link popup-directions-link" href="${directionsUrl}" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          Directions
+        </a>
         <button class="confirm-pin-button" type="button" data-pin-id="${pin.id}">Confirm</button>
         <button class="report-pin-button" type="button" data-pin-id="${pin.id}">Report</button>
       </div>
