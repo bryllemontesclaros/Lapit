@@ -1766,27 +1766,43 @@ h2 {
 
 .maplibregl-popup-content {
   padding: 0;
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(40px) saturate(220%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(220%) !important;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14), 0 8px 16px rgba(15, 23, 42, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
   color: #111827;
+  overflow: hidden !important;
   font: 0.86rem/1.35 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  box-shadow: var(--shadow);
-  overflow: hidden;
+}
+
+/* Hide the triangle tip for glassmorphism */
+.maplibregl-popup-tip {
+  display: none !important;
 }
 
 .maplibregl-popup-close-button {
-  top: 10px !important;
-  right: 10px !important;
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  color: #0f172a;
-  font-size: 1.2rem;
-  font-weight: 850;
-  line-height: 1;
+  top: 14px !important;
+  right: 14px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, 0.06) !important;
+  color: #0f172a !important;
+  font-size: 1.4rem !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  transition: background 0.2s ease, transform 0.2s ease !important;
 }
 
 .maplibregl-popup-close-button:hover {
-  background: #f1f5f9;
+  background: rgba(15, 23, 42, 0.12) !important;
+  transform: scale(1.05) !important;
 }
 
 .spot-popup-card {
@@ -3350,6 +3366,8 @@ summary {
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.3) !important;
   border-radius: 999px !important;
   background: #1e293b !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .maplibregl-popup:has(.user-popup-card) .maplibregl-popup-tip {
