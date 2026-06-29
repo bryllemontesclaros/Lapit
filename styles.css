@@ -1832,7 +1832,7 @@ h2 {
 .popup-directions-link {
   flex: 1 1 100%;
   min-height: 44px !important;
-  background: var(--primary) !important;
+  background: var(--lapit-blue) !important;
   color: white !important;
   border: none !important;
   box-shadow: 0 4px 14px rgba(70, 93, 222, 0.35) !important;
@@ -1841,6 +1841,10 @@ h2 {
   font-size: 0.95rem !important;
   font-weight: 800 !important;
   transition: opacity 0.2s ease, transform 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
 }
 
 .popup-directions-link:active {
@@ -3244,36 +3248,80 @@ summary {
   display: none !important;
 }
 
-/* Leaflet popup — used for the user location "You are here" marker */
+/* Leaflet popup — used by default for all popups */
 .leaflet-popup-content-wrapper {
   padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(24px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.08) !important;
+  color: #111827;
+  overflow: hidden !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  line-height: normal;
+}
+
+/* Hide the triangle tip for glassmorphism */
+.leaflet-popup-tip-container {
+  display: none !important;
+}
+
+.leaflet-popup-close-button {
+  top: 10px !important;
+  right: 10px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 999px !important;
+  color: #0f172a !important;
+  font-size: 1.2rem !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+}
+
+.leaflet-popup-close-button:hover {
+  background: #f1f5f9 !important;
+}
+
+/* User location "You are here" marker override */
+.leaflet-popup:has(.user-popup-card) .leaflet-popup-content-wrapper {
   border: none !important;
   border-radius: 999px !important;
   background: #0f172a !important;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.28) !important;
   color: #ffffff;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-.leaflet-popup-content {
-  margin: 0 !important;
+.leaflet-popup:has(.user-popup-card) .leaflet-popup-content {
   padding: 10px 14px 10px 14px !important;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.78rem;
   font-weight: 600;
-  line-height: normal;
   white-space: nowrap;
 }
 
-.leaflet-popup-tip-container {
+.leaflet-popup:has(.user-popup-card) .leaflet-popup-tip-container {
+  display: block !important;
   margin-top: -1px;
 }
 
-.leaflet-popup-tip {
+.leaflet-popup:has(.user-popup-card) .leaflet-popup-tip {
   background: #0f172a !important;
   box-shadow: none !important;
 }
 
-.leaflet-popup-close-button {
+.leaflet-popup:has(.user-popup-card) .leaflet-popup-close-button {
   display: none !important;
 }
 
