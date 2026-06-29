@@ -3248,22 +3248,8 @@ function showNearestStations(position) {
       .bindPopup("<div class='spot-popup-card user-popup-card'>You are here</div>");
   }
 
-  if (Number.isFinite(accuracyMeters)) {
-    if (userAccuracyCircle) {
-      userAccuracyCircle.setLatLng(userPoint);
-      userAccuracyCircle.setRadius(accuracyMeters);
-    } else {
-      userAccuracyCircle = L.circle(userPoint, {
-        radius: accuracyMeters,
-        color: "#0ea5e9",
-        weight: 1,
-        opacity: 0.5,
-        fillColor: "#0ea5e9",
-        fillOpacity: 0.12,
-        interactive: false
-      }).addTo(map);
-    }
-  }
+  // Maplibre doesn't natively support meter-based circles without Turf.js polygons.
+  // To prevent giant pixel-based circles, we omit the accuracy circle.
 
   renderBuiltInStationMarkers();
   updateNearestTransitList({ moveMap: true });
