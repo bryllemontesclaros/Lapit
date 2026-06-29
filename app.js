@@ -3833,7 +3833,7 @@ if (destinationSearchInput) {
     searchResultsDropdown.classList.add("is-hidden");
     clearSearchButton.classList.add("is-hidden");
     if (destinationMarker) {
-      map.removeLayer(destinationMarker);
+      destinationMarker.remove();
       destinationMarker = null;
     }
     clearActiveRouteLines();
@@ -3893,7 +3893,7 @@ function handleDestinationSelection(place) {
   const destLng = parseFloat(place.lon);
   
   if (destinationMarker) {
-    map.removeLayer(destinationMarker);
+    destinationMarker.remove();
   }
   
   const destIcon = L.divIcon({

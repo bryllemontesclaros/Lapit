@@ -152,6 +152,11 @@ class MapAdapter {
     return this._container;
   }
 
+  getCenter() {
+    const center = this._map.getCenter();
+    return { lat: center.lat, lng: center.lng };
+  }
+
   getBounds() {
     const bounds = this._map.getBounds();
 
@@ -517,6 +522,9 @@ window.L = {
     disableClickPropagation(element) {
       element.addEventListener("click", (event) => event.stopPropagation());
     }
+  },
+  circle(latLng, options) {
+    return new CircleMarkerAdapter(latLng, options);
   },
   circleMarker(latLng, options) {
     return new CircleMarkerAdapter(latLng, options);
