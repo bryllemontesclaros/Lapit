@@ -2953,7 +2953,6 @@ h2 {
     width: min(286px, calc(100vw - 40px));
     padding: 13px;
   }
-  }
 }
 
 @media (max-width: 380px) {
