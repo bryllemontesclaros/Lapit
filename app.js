@@ -250,6 +250,7 @@ const clearSearchButton = document.querySelector("#clear-search-button");
 const searchResultsDropdown = document.querySelector("#search-results-dropdown");
 const addPinButton = document.querySelector("#add-pin-button");
 const addRouteButton = document.querySelector("#add-route-button");
+const toggleAllRoutesButton = document.querySelector("#toggle-all-routes-button");
 const myLocationButton = document.querySelector("#my-location-button");
 const routeModeBanner = document.querySelector("#route-mode-banner");
 const routeModeStep = document.querySelector("#route-mode-step");
@@ -335,6 +336,7 @@ let activeRouteVisualPaths = [];
 const guestChoiceKey = "lapit-guest-mode";
 const adminEmails = new Set(["montesclarosbrylle@gmail.com"]);
 let routeConnections = [...hardcodedRouteConnections];
+let isShowingAllRoutes = false;
 
 const firebaseConfig = window.LAPIT_FIREBASE || {};
 const hasFirebaseConfig =
@@ -462,6 +464,9 @@ map.on("move zoom moveend zoomend", updateActiveRouteVisualOverlay);
 
 L.DomEvent.disableClickPropagation(addPinButton);
 L.DomEvent.disableClickPropagation(addRouteButton);
+if (toggleAllRoutesButton) {
+  L.DomEvent.disableClickPropagation(toggleAllRoutesButton);
+}
 L.DomEvent.disableClickPropagation(myLocationButton);
 L.DomEvent.disableClickPropagation(authButton);
 L.DomEvent.disableClickPropagation(accountMenuButton);
@@ -1428,6 +1433,88 @@ function setActiveRouteVisualPaths(routePaths) {
   window.setTimeout(updateActiveRouteVisualOverlay, 80);
 }
 
+function updateAllRoutesWeb() {
+  if (!map._map || !map._map.loaded() || !isShowingAllRoutes) {
+    return;
+  }
+
+  const features = routeConnections.map(route => {
+    const path = getRouteRenderPath(route);
+    return {
+      type: "Feature",
+      properties: { id: route.id },
+      geometry: {
+        type: "LineString",
+        coordinates: path.map(p => [p.lng || p[1], p.lat || p[0]])
+      }
+    };
+  });
+
+  const geojson = { type: "FeatureCollection", features };
+
+  if (map._map.getSource("all-routes-web")) {
+    map._map.getSource("all-routes-web").setData(geojson);
+  } else {
+    map._map.addSource("all-routes-web", {
+      type: "geojson",
+      data: geojson
+    });
+
+    map._map.addLayer({
+      id: "all-routes-web-line",
+      type: "line",
+      source: "all-routes-web",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": "#e11d48",
+        "line-opacity": 0.35,
+        "line-width": 3
+      }
+    });
+    
+    // Add a pulsing/flowing effect casing
+    map._map.addLayer({
+      id: "all-routes-web-line-casing",
+      type: "line",
+      source: "all-routes-web",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      paint: {
+        "line-color": "#ffffff",
+        "line-opacity": 0.15,
+        "line-width": 6
+      }
+    }, "all-routes-web-line");
+  }
+}
+
+function toggleAllRoutesWeb() {
+  isShowingAllRoutes = !isShowingAllRoutes;
+  
+  if (toggleAllRoutesButton) {
+    toggleAllRoutesButton.setAttribute("aria-pressed", isShowingAllRoutes);
+  }
+
+  if (isShowingAllRoutes) {
+    updateAllRoutesWeb();
+  } else {
+    if (map._map && map._map.getLayer("all-routes-web-line")) {
+      map._map.removeLayer("all-routes-web-line");
+    }
+    if (map._map && map._map.getLayer("all-routes-web-line-casing")) {
+      map._map.removeLayer("all-routes-web-line-casing");
+    }
+    if (map._map && map._map.getSource("all-routes-web")) {
+      map._map.removeSource("all-routes-web");
+    }
+  }
+}
+
 function clearActiveRouteLines() {
   activeRouteLayers.clearLayers();
   setActiveRouteVisualPaths([]);
@@ -2367,6 +2454,10 @@ async function loadCommunityRoutes() {
     communityRoutesById.set(route.id, route);
   });
   routeConnections = [...hardcodedRouteConnections, ...communityRoutes];
+
+  if (isShowingAllRoutes) {
+    updateAllRoutesWeb();
+  }
 }
 
 async function loadCommunityPins() {
@@ -3335,6 +3426,10 @@ addPinButton.addEventListener("click", async () => {
   if (!addPinMode) {
     removePendingPinMarker();
   }
+});
+
+toggleAllRoutesButton.addEventListener("click", () => {
+  toggleAllRoutesWeb();
 });
 
 addRouteButton.addEventListener("click", () => {
