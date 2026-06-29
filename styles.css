@@ -1762,6 +1762,7 @@ h2 {
 
 .maplibregl-popup {
   z-index: 900;
+  max-width: none !important;
 }
 
 .maplibregl-popup-content {
@@ -2773,11 +2774,6 @@ h2 {
   line-height: 1.18;
 }
 
-.maplibregl-popup-content {
-  border-radius: 16px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-}
-
 @media (min-width: 900px) {
   .map-brand {
     top: 24px;
@@ -2957,9 +2953,6 @@ h2 {
     width: min(286px, calc(100vw - 40px));
     padding: 13px;
   }
-
-  .maplibregl-popup-content {
-    border-radius: 14px;
   }
 }
 
@@ -3249,24 +3242,6 @@ summary {
   border-radius: 0;
   box-shadow: none;
 }
-
-/* Apply a premium glassmorphism container */
-.maplibregl-popup-content {
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: 20px !important;
-  background: rgba(255, 255, 255, 0.96) !important;
-  backdrop-filter: blur(24px) saturate(1.8) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.08) !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Hide the triangle tip since it cannot easily have a stroke */
-.maplibregl-popup-tip {
-  display: none !important;
-}
-
 /* Leaflet popup — used by default for all popups */
 .leaflet-popup-content-wrapper {
   padding: 0;
